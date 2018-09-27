@@ -5,5 +5,5 @@ git add *.vcxproj
 git add *.filters
 git add *.user
 git commit -am"Bogachev.m_%DATE%"
-git push MPolytech master
+git push Polytech master
 pause
