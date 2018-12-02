@@ -29,6 +29,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Lab_2-3-4(Arrays,Functions)
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Lab_12(C_url)", "Lab_12(C_url)\Lab_12(C_url).vcxproj", "{9727CF0D-2C78-4ACA-A218-79CB4A21FEDA}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Lab_13(Open_SSL)", "Lab_13(Open_SSL)\Lab_13(Open_SSL).vcxproj", "{85DA76AE-210C-4A71-B297-89D1D8FE1832}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -141,6 +143,14 @@ Global
 		{9727CF0D-2C78-4ACA-A218-79CB4A21FEDA}.Release|x64.Build.0 = Release|x64
 		{9727CF0D-2C78-4ACA-A218-79CB4A21FEDA}.Release|x86.ActiveCfg = Release|Win32
 		{9727CF0D-2C78-4ACA-A218-79CB4A21FEDA}.Release|x86.Build.0 = Release|Win32
+		{85DA76AE-210C-4A71-B297-89D1D8FE1832}.Debug|x64.ActiveCfg = Debug|x64
+		{85DA76AE-210C-4A71-B297-89D1D8FE1832}.Debug|x64.Build.0 = Debug|x64
+		{85DA76AE-210C-4A71-B297-89D1D8FE1832}.Debug|x86.ActiveCfg = Debug|Win32
+		{85DA76AE-210C-4A71-B297-89D1D8FE1832}.Debug|x86.Build.0 = Debug|Win32
+		{85DA76AE-210C-4A71-B297-89D1D8FE1832}.Release|x64.ActiveCfg = Release|x64
+		{85DA76AE-210C-4A71-B297-89D1D8FE1832}.Release|x64.Build.0 = Release|x64
+		{85DA76AE-210C-4A71-B297-89D1D8FE1832}.Release|x86.ActiveCfg = Release|Win32
+		{85DA76AE-210C-4A71-B297-89D1D8FE1832}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
