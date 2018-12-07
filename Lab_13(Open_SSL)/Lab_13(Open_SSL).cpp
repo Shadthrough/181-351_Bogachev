@@ -1,3 +1,6 @@
+#ifdef _MSC_VER
+#define _CRT_SECURE_NO_WARNINGS
+#endif
 #include <iostream>
 #include <openssl/conf.h> // функции, структуры и константы настройки OpenSSL
 #include <openssl/conf.h>
@@ -5,6 +8,8 @@
 #include <openssl/err.h> // коды внутренних ошибок OpenSSL и их расшифровка
 #include <openssl/aes.h>
 #include <fstream>
+#include <string>
+#include <cstring>
 
 #pragma comment (lib, "ws2_32.LIB")
 #pragma comment (lib, "gdi32.LIB")
@@ -13,6 +18,7 @@
 #pragma comment (lib, "user32")
 #pragma comment (lib, "wldap32")
 
+//#define BUFLEN 256
 // библиотеки OpenSSL (openssl.org) подключаются неявно динамически (см. конспект лаб. по библиотекам)
 
 using namespace std;
@@ -41,9 +47,10 @@ int main()
 			return a;
 		}
 	};
-
-	unsigned char plaintext [256];// исходный текст
-	int plaintext_len = strlen((char *)plaintext); // длина текста
+	FILE *in, *out;
+	in = fopen("in.txt", "r");
+	unsigned char plaintext[256];
+	int plaintext_len;// = fread(plaintext, 1, BUFLEN, in); // длина текста
 	unsigned char *key = (unsigned char *)"0123456789"; // пароль (ключ)
 	unsigned char *iv = (unsigned char *)"0123456789012345"; // инициализирующий вектор, рандомайзер
 	unsigned char cryptedtext[256]; // зашифрованный результат
@@ -63,41 +70,32 @@ int main()
 		key, // ключ/пароль/секрет
 		iv); // рандомайзер (случайный начальный вектор)
 
-	//					My part
-	fstream fi, fo;
-	fi.open("i.txt", fstream::in | fstream::binary);
-	fo.open("o.txt", fstream::out | fstream::binary);
-	
-	int cryptedtext_len;
+	// 4. САМ ПРОЦЕСС ШИФРОВАНИЯ - ФУКНЦИЯ EVP_EncryptUpdate
 	int len;
-	while (!fi.eof())
+	out = fopen("out.txt", "w");
+	for (;;)
 	{
-		fi.read((char *)plaintext, 256);
-		// 4. САМ ПРОЦЕСС ШИФРОВАНИЯ - ФУКНЦИЯ EVP_EncryptUpdate
-
-		for (int i = 0; i < strlen((char *)plaintext); i++)
-		{
-			cout << plaintext[i];
-		}
-		cout << endl;
-
-
-
-		EVP_EncryptUpdate(ctx, // объект с настройками
+		plaintext_len = fread(plaintext, 1, 256, in);
+		if (plaintext_len <= 0) break;
+		if (!EVP_EncryptUpdate(ctx, // объект с настройками
 			cryptedtext, // входной параметр: ссылка, куда помещать зашифрованные данные
 			&len, // выходной параметр: длина полученного шифра
 			plaintext, // входной параметр: что шифровать
-			plaintext_len); // входной параметр : длина входных данных
-		cryptedtext_len = len;
-		fo.write((char *)cryptedtext, 256);
+			plaintext_len)) return 0; // входной параметр : длина входных данных
+		fwrite(cryptedtext, 1, len, out);
 	}
+	int cryptedtext_len = len;
+
 	// 5. Финализация процесса шифрования
 	// необходима, если последний блок заполнен данными не полностью
 	EVP_EncryptFinal_ex(ctx, cryptedtext + len, &len);
 	cryptedtext_len += len;
+	fwrite(cryptedtext, 1, cryptedtext_len, out);
 
 	// 6. Удаление структуры
 	EVP_CIPHER_CTX_free(ctx);
+	fclose(in);
+	fclose(out);
 
 	// вывод зашифрованных данных
 	for (int i = 0; i < cryptedtext_len; i++)
