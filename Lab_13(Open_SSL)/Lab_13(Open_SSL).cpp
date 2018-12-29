@@ -2,10 +2,10 @@
 #define _CRT_SECURE_NO_WARNINGS
 #endif
 #include <iostream>
-#include <openssl/conf.h> // функции, структуры и константы настройки OpenSSL
+#include <openssl/conf.h> // functions, structures and configurations consts of OpenSSL
 #include <openssl/conf.h>
-#include <openssl/evp.h> // сами криптогрфические функции https://wiki.openssl.org/index.php/EVP
-#include <openssl/err.h> // коды внутренних ошибок OpenSSL и их расшифровка
+#include <openssl/evp.h> // crypto functions themselves https://wiki.openssl.org/index.php/EVP
+#include <openssl/err.h> // inner errors codes of OpenSSL and their decrypt
 #include <openssl/aes.h>
 #include <fstream>
 #include <string>
@@ -19,7 +19,7 @@
 #pragma comment (lib, "wldap32")
 
 //#define BUFLEN 256
-// библиотеки OpenSSL (openssl.org) подключаются неявно динамически (см. конспект лаб. по библиотекам)
+// OpenSSL libraries (openssl.org) are connected not explicitly, dynamicly (see lab 10)
 
 using namespace std;
 
@@ -88,9 +88,9 @@ int main()
 
 	// 5. Финализация процесса шифрования
 	// необходима, если последний блок заполнен данными не полностью
-	EVP_EncryptFinal_ex(ctx, cryptedtext + len, &len);
+	EVP_EncryptFinal_ex(ctx, cryptedtext, &len);
 	cryptedtext_len += len;
-	fwrite(cryptedtext, 1, cryptedtext_len, out);
+	fwrite(cryptedtext, 1, len, out);
 
 	// 6. Удаление структуры
 	EVP_CIPHER_CTX_free(ctx);
