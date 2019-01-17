@@ -47,8 +47,8 @@ int main()
 			return a;
 		}
 	};
-	FILE *in, *out;
-	in = fopen("in.txt", "r");
+	FILE *in, *out, *outd;
+	in = fopen("in.txt", "rb");
 	unsigned char plaintext[256];
 	int plaintext_len;// = fread(plaintext, 1, BUFLEN, in); // text length
 	unsigned char *key = (unsigned char *)"0123456789"; // password (key)
@@ -71,7 +71,7 @@ int main()
 
 	// 4. actual encryption - FUNC EVP_EncryptUpdate
 	int len;
-	out = fopen("out.txt", "w");
+	out = fopen("outcrypt.txt", "wb");
 	for (;;)
 	{
 		plaintext_len = fread(plaintext, 1, 256, in);
@@ -113,17 +113,29 @@ int main()
 	EVP_DecryptInit_ex(ctx, EVP_aes_256_cbc(), NULL, key, iv); // init with AES key & vector
 
 	// 3.
-	EVP_DecryptUpdate(ctx, decryptedtext, &len, cryptedtext, cryptedtext_len);  // decryption
+	out = fopen("outcrypt.txt", "rb");
+	outd = fopen("outdecrypt.txt", "wb");
+	for (;;)
+	{
+		cryptedtext_len = fread(cryptedtext, 1, 256, out);
+		if (cryptedtext_len <= 0) break;
+		if (!EVP_DecryptUpdate(ctx, decryptedtext, &len, cryptedtext, cryptedtext_len)) return 0;// decryption
+		fwrite(decryptedtext, 1, len, outd);
 
+	}
 	// 4.
 	int dectypted_len = len;
-	EVP_DecryptFinal_ex(ctx, decryptedtext + len, &len);
+	EVP_DecryptFinal_ex(ctx, decryptedtext, &len);//+len
 
 	// 5.
 	dectypted_len += len;
 	EVP_CIPHER_CTX_free(ctx);
 	decryptedtext[dectypted_len] = '\0';
+	fwrite(decryptedtext, 1, len, outd);////////////////////////////////////////////////
+
 	cout << decryptedtext << endl;
+	fclose(out);
+	fclose(outd);
 
 	// --- file encryption 
 	// simmular, but done by parts in cycle

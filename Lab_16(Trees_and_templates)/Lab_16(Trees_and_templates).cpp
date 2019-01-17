@@ -130,41 +130,41 @@ private:
 	tree * root;
 public:
 	tree();
-	tree(bool r);
-	tree(char * el, bool r);
+	//tree(bool r);
+	tree(char * el);
 	~tree();
-	//void write(char * el);
-	//void add_here(tree * son);
-	void add_bot(char* el);
+	void write(char * el);
+	void add_here(tree * son);
+	//void add_bot(char* el);
 	void print();
 	void print(tree * ptr, int i);
 };
 
 
+/*tree::tree()
+{
+	rptr = NULL;
+	lbptr = NULL;
+}*/
 tree::tree()
 {
 	rptr = NULL;
 	lbptr = NULL;
+	//if (r) root = NULL;
 }
-tree::tree(bool r)
-{
-	rptr = NULL;
-	lbptr = NULL;
-	if (r) root = NULL;
-}
-tree::tree(char * el, bool r)
+tree::tree(char * el)
 {
 	rptr = NULL;
 	lbptr = NULL;
 	elem = el;
-	if (r) root = NULL;
+	//if (r) root = NULL;
 }
 tree::~tree()
 {
 	//delete rptr;
 	//delete lbptr;
 }
-/*
+
 void tree::write(char * el)
 {
 	this->elem = el;
@@ -187,8 +187,9 @@ void tree::add_here(tree * son)
 	{
 		this->lbptr = son;
 	}
-}
+}/*
 */
+/*
 void tree::add_bot(char* el)
 {
 	tree * tmp = new tree;//next
@@ -204,13 +205,13 @@ void tree::add_bot(char* el)
 	this->root = tmp->root;
 	this->elem = tmp->elem;
 }
-
+*/
 void tree::print()
 {
 	//tree * tmp;
 	//*tmp = *this;// remove tmp afterwords
-	std::cout << root->elem << "\n|\nv\n";
-	if (root->lbptr != NULL) print(root->lbptr, 0);
+	std::cout << this->elem << "\n|\nv\n";
+	if (this->lbptr != NULL) print(this->lbptr, 0);
 }
 
 void tree::print(tree * ptr, int i)
@@ -247,8 +248,8 @@ int main()
 	//li.push_back(7); 
 	//li.print();
 	
-	tree rt((char *) "root", 1);
-	/*
+	//tree rt((char *) "root", 1);
+	tree rt;
 	rt.write((char*)"root");
 	tree lv1_1((char*)"lv1_1");
 	tree lv1_2((char*)"lv1_2");
@@ -258,12 +259,15 @@ int main()
 	rt.add_here(&lv1_3);
 	tree lvl2_1((char*)"lvl2_1");
 	lv1_3.add_here(&lvl2_1);
-	rt.print();
+	rt.print();/*
 	*/
+
+	/*
 	rt.add_bot((char*)"lv1_1");
 	rt.add_bot((char*)"?");
 	rt.add_bot((char*)"??");
 	rt.print();
+	*/
 	getchar();
 	return 0;
 }
