@@ -253,7 +253,7 @@ int main()
 	rt.write((char*)"root");
 	tree lv1_1((char*)"lv1_1");
 	tree lv1_2((char*)"lv1_2");
-	tree lv1_3((char*)"lv1_3");
+	tree lv1_3((char*)"xyi");
 	rt.add_here(&lv1_1);
 	rt.add_here(&lv1_2);
 	rt.add_here(&lv1_3);

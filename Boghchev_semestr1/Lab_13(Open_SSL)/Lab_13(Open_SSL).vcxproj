@@ -120,7 +120,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="DBClass.cpp" />
+    <ClCompile Include="DBRecord.cpp" />
     <ClCompile Include="Lab_13(Open_SSL).cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="DBClass.h" />
+    <ClInclude Include="DBRecord.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
