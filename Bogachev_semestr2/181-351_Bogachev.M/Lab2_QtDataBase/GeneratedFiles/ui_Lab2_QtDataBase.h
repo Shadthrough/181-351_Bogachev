@@ -17,6 +17,7 @@
 #include <QtWidgets/QMainWindow>
 #include <QtWidgets/QMenuBar>
 #include <QtWidgets/QPushButton>
+#include <QtWidgets/QRadioButton>
 #include <QtWidgets/QSpacerItem>
 #include <QtWidgets/QStatusBar>
 #include <QtWidgets/QToolBar>
@@ -30,6 +31,7 @@ public:
     QWidget *centralWidget;
     QLabel *Logo;
     QPushButton *butt;
+    QRadioButton *show;
     QWidget *widget;
     QFormLayout *formLayout;
     QLabel *Log_label;
@@ -60,6 +62,10 @@ public:
         QFont font;
         font.setPointSize(10);
         butt->setFont(font);
+        show = new QRadioButton(centralWidget);
+        show->setObjectName(QString::fromUtf8("show"));
+        show->setGeometry(QRect(190, 200, 91, 21));
+        show->setFont(font);
         widget = new QWidget(centralWidget);
         widget->setObjectName(QString::fromUtf8("widget"));
         widget->setGeometry(QRect(131, 141, 249, 56));
@@ -98,6 +104,7 @@ public:
         pass->setObjectName(QString::fromUtf8("pass"));
         pass->setMaximumSize(QSize(16777215, 17));
         pass->setFont(font1);
+        pass->setEchoMode(QLineEdit::Password);
 
         formLayout->setWidget(2, QFormLayout::FieldRole, pass);
 
@@ -123,6 +130,7 @@ public:
         Lab2_QtDataBaseClass->setWindowTitle(QApplication::translate("Lab2_QtDataBaseClass", "Lab2_QtDataBase", nullptr));
         Logo->setText(QString());
         butt->setText(QApplication::translate("Lab2_QtDataBaseClass", "Log in", nullptr));
+        show->setText(QApplication::translate("Lab2_QtDataBaseClass", "Show Password", nullptr));
         Log_label->setText(QApplication::translate("Lab2_QtDataBaseClass", "Login", nullptr));
         Pass_label->setText(QApplication::translate("Lab2_QtDataBaseClass", "Password", nullptr));
     } // retranslateUi

@@ -36,10 +36,10 @@
     <ClCompile Include="Lab2_QtDataBase.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="DataBase.cpp">
+    <ClCompile Include="stats.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="stats.cpp">
+    <ClCompile Include="db.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -50,12 +50,18 @@
     <QtMoc Include="stats.h">
       <Filter>Header Files</Filter>
     </QtMoc>
+    <QtMoc Include="db.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
   </ItemGroup>
   <ItemGroup>
     <QtUic Include="Lab2_QtDataBase.ui">
       <Filter>Form Files</Filter>
     </QtUic>
     <QtUic Include="stats.ui">
+      <Filter>Form Files</Filter>
+    </QtUic>
+    <QtUic Include="db.ui">
       <Filter>Form Files</Filter>
     </QtUic>
   </ItemGroup>

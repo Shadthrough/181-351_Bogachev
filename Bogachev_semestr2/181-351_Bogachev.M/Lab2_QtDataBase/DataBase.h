@@ -1,7 +1,5 @@
-#include <string>
+/*#include <string>
 #include <vector>
-
-std::string FileName = "DataBase.txt";
 
 struct data{
 	std::string race; 
@@ -17,7 +15,7 @@ class DataBase{
 
 public:
 	DataBase();//конструктор
-	DataBase(std::string* tempDB); //конструктор по строке: т.е. по строке, в которой записана БД, формируем БД
+	///////////////////////////DataBase(std::string* tempDB); //конструктор по строке: т.е. по строке, в которой записана БД, формируем БД
 	~DataBase();//деструктор
 	bool add_data(data tempData);// добавить строку данных в БД
 	bool open(std::string filename);//открываем файл
@@ -48,7 +46,7 @@ public:
 	bool del_data(std::string id);//удалить запись с заданным id
 	
 	template<typename T>
-	//vector<data> find(int criterior, T data2find);//удалить запись с заданным id
+	std::vector<data> find(int criterior, T data2find);//удалить запись с заданным id
 	
 	bool change(std::string id, data tempData)
 	{
@@ -56,12 +54,22 @@ public:
 	}
 	
 	bool write2file();
+
+	/*DataBase()//конструктор
+	{
+
+	}
+	//DataBase(std::string* tempDB); //конструктор по строке: т.е. по строке, в которой записана БД, формируем БД
+	~DataBase()//деструктор
+	{
+
+	}
 	
 private:
-	//vector<data> *db;
+	std::vector<data> *db;
 	FILE* fin;
 
 protected:
 
 
-};
+};*/
