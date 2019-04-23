@@ -1,26 +1,26 @@
 ﻿#include "db.h"
-//#include <string>
-#include <fstream>
 
 db::db(QWidget *parent)
 	: QDialog(parent)
 {
 	ui.setupUi(this);
+	setdb("DataBase.txt");
+	showdb(daba);
 }
 
 db::~db()
 {
 }
 
-DaBa::DaBa()
-{
-}
+//DaBa::DaBa()
+//{
+//}
 
-DaBa::~DaBa()
-{
-}
+//DaBa::~DaBa()
+//{
+//}
 
-bool DaBa::setdb(std::string filename)
+bool db/*DaBa*/::setdb(std::string filename)
 {
 	std::fstream f;
 	f.open(filename);
@@ -32,13 +32,13 @@ bool DaBa::setdb(std::string filename)
 	while (!f.eof())
 	{
 		std::getline(f, tmp);
-		//db.push_back(parse(tmp));
+		daba.push_back(parse(tmp));
 	}
 	return true;
 }
 
 
-QString parseunit(std::string str)
+QString db::parseunit(std::string str)
 {
 	QString temp;
 	std::string tmp;
@@ -50,15 +50,53 @@ QString parseunit(std::string str)
 	return temp;
 }
 
-void db::set_test(QString a)
+QStandardItem * db::toItem(QString a)
 {
-	std::string tmp;
-	ui.testb->setText(parseunit(tmp)); ///////////////////////////	DO A Test check on parse here
+	QStandardItem * item;
+	item = new QStandardItem(a);
+	return item;
 }
 
-bdata DaBa::parse(std::string str)
+void db::showdb(std::vector<bdata> a)
 {
+	table = new QStandardItemModel;
+	QStringList head;
+	head.append("Train");
+	head.append("Price");
+	head.append("Company");
+	head.append("Status");
+
+	table->setHorizontalHeaderLabels(head);
 	
+	bdata tmp;
+	int row = 0, col;
+
+	for (int i = 0; i < a.size(); i++)
+	{
+		tmp = a[i];
+		col = 0;
+		table->setItem(row, col, toItem(tmp.ride));
+		col++;
+		table->setItem(row, col, toItem(tmp.price));
+		col++;
+		table->setItem(row, col, toItem(tmp.comp));
+		col++;
+		table->setItem(row, col, toItem(tmp.sold));
+		row++;
+	}
+
+	ui.tableui->setModel(table);
+	ui.tableui->resizeRowsToContents();
+	ui.tableui->resizeColumnsToContents();
+}
+
+void db::set_test(std::string a)
+{
+	ui.testb->setText(parseunit(a)); ///////////////////////////	DO A Test check on parse here  /// done
+}
+
+bdata db/*DaBa*/::parse(std::string str)
+{
 	bdata a;
 	QString temp;
 	std::string tmp;
@@ -68,19 +106,19 @@ bdata DaBa::parse(std::string str)
 	tmp = str.substr(b + 1, e - b - 1);
 	temp = QString::fromUtf8(tmp.c_str());
 	a.ride = temp;
-	str.erase(0, e);
+	str.erase(0, e + 1);
 	b = str.find(':');
 	e = str.find(',');
 	tmp = str.substr(b + 1, e - b - 1);
 	temp = QString::fromUtf8(tmp.c_str());
 	a.price = temp;
-	str.erase(0, e);
+	str.erase(0, e + 1);
 	b = str.find(':');
 	e = str.find(',');
 	tmp = str.substr(b + 1, e - b - 1);
 	temp = QString::fromUtf8(tmp.c_str());
 	a.comp = temp;
-	str.erase(0, e);
+	str.erase(0, e + 1);
 	b = str.find(':');
 	e = str.find(',');
 	tmp = str.substr(b + 1, e - b - 1);

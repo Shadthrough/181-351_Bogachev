@@ -7,6 +7,10 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Lab2_QtDataBase", "Lab2_QtD
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Test", "Test\Test.vcxproj", "{EEF2FC85-E272-4FFC-BD31-C61DEE63D328}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "server", "server\server.vcxproj", "{A125B95A-B817-45BE-A46D-6D7BF184FA84}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ConnectionSQLite", "ConnectionSQLite\ConnectionSQLite.vcxproj", "{3094A9E2-2A9E-42C3-A5E7-108EF0082028}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -29,6 +33,18 @@ Global
 		{EEF2FC85-E272-4FFC-BD31-C61DEE63D328}.Release|x64.Build.0 = Release|x64
 		{EEF2FC85-E272-4FFC-BD31-C61DEE63D328}.Release|x86.ActiveCfg = Release|Win32
 		{EEF2FC85-E272-4FFC-BD31-C61DEE63D328}.Release|x86.Build.0 = Release|Win32
+		{A125B95A-B817-45BE-A46D-6D7BF184FA84}.Debug|x64.ActiveCfg = Debug|x64
+		{A125B95A-B817-45BE-A46D-6D7BF184FA84}.Debug|x64.Build.0 = Debug|x64
+		{A125B95A-B817-45BE-A46D-6D7BF184FA84}.Debug|x86.ActiveCfg = Debug|x64
+		{A125B95A-B817-45BE-A46D-6D7BF184FA84}.Release|x64.ActiveCfg = Release|x64
+		{A125B95A-B817-45BE-A46D-6D7BF184FA84}.Release|x64.Build.0 = Release|x64
+		{A125B95A-B817-45BE-A46D-6D7BF184FA84}.Release|x86.ActiveCfg = Release|x64
+		{3094A9E2-2A9E-42C3-A5E7-108EF0082028}.Debug|x64.ActiveCfg = Debug|x64
+		{3094A9E2-2A9E-42C3-A5E7-108EF0082028}.Debug|x64.Build.0 = Debug|x64
+		{3094A9E2-2A9E-42C3-A5E7-108EF0082028}.Debug|x86.ActiveCfg = Debug|x64
+		{3094A9E2-2A9E-42C3-A5E7-108EF0082028}.Release|x64.ActiveCfg = Release|x64
+		{3094A9E2-2A9E-42C3-A5E7-108EF0082028}.Release|x64.Build.0 = Release|x64
+		{3094A9E2-2A9E-42C3-A5E7-108EF0082028}.Release|x86.ActiveCfg = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

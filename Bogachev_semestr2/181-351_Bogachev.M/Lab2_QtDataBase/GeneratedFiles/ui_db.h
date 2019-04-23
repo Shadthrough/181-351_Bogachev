@@ -12,7 +12,8 @@
 #include <QtCore/QVariant>
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QDialog>
-#include <QtWidgets/QLabel>
+#include <QtWidgets/QHeaderView>
+#include <QtWidgets/QTableView>
 #include <QtWidgets/QTextBrowser>
 
 QT_BEGIN_NAMESPACE
@@ -20,20 +21,21 @@ QT_BEGIN_NAMESPACE
 class Ui_db
 {
 public:
-    QLabel *test;
     QTextBrowser *testb;
+    QTableView *tableui;
 
     void setupUi(QDialog *db)
     {
         if (db->objectName().isEmpty())
             db->setObjectName(QString::fromUtf8("db"));
         db->resize(400, 300);
-        test = new QLabel(db);
-        test->setObjectName(QString::fromUtf8("test"));
-        test->setGeometry(QRect(20, 70, 91, 20));
         testb = new QTextBrowser(db);
         testb->setObjectName(QString::fromUtf8("testb"));
-        testb->setGeometry(QRect(130, 50, 256, 192));
+        testb->setGeometry(QRect(310, 250, 31, 21));
+        tableui = new QTableView(db);
+        tableui->setObjectName(QString::fromUtf8("tableui"));
+        tableui->setGeometry(QRect(40, 20, 301, 211));
+        tableui->setShowGrid(true);
 
         retranslateUi(db);
 
@@ -43,7 +45,6 @@ public:
     void retranslateUi(QDialog *db)
     {
         db->setWindowTitle(QApplication::translate("db", "db", nullptr));
-        test->setText(QApplication::translate("db", "TextLabel", nullptr));
         testb->setHtml(QApplication::translate("db", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"

@@ -41,6 +41,7 @@ public:
     QHBoxLayout *horizontalLayout;
     QPushButton *editb;
     QPushButton *viewb;
+    QPushButton *ser;
 
     void setupUi(QWidget *stats)
     {
@@ -127,6 +128,13 @@ public:
 
         verticalLayout->addLayout(horizontalLayout);
 
+        ser = new QPushButton(stats);
+        ser->setObjectName(QString::fromUtf8("ser"));
+        ser->setGeometry(QRect(120, 210, 141, 41));
+        QFont font;
+        font.setBold(true);
+        font.setWeight(75);
+        ser->setFont(font);
 
         retranslateUi(stats);
 
@@ -147,6 +155,7 @@ public:
         regdate->setText(QApplication::translate("stats", "Registration date:", nullptr));
         editb->setText(QApplication::translate("stats", "Edit list", nullptr));
         viewb->setText(QApplication::translate("stats", "View list", nullptr));
+        ser->setText(QApplication::translate("stats", "Server test", nullptr));
     } // retranslateUi
 
 };

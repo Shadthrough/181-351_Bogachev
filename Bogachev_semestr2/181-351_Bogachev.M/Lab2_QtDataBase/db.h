@@ -1,11 +1,27 @@
 #pragma once
 
 #include <QDialog>
+#include <QWidget>
+#include <QStandardItemModel>
+#include <QStandardItem>
+#include <QTableView>
+#include <QAbstractItemModel>
+#include <QString>
 #include <string>
 #include <vector>
+#include <fstream>
 #include <QFile>
 #include <QTextStream>
 #include "ui_db.h"
+
+struct bdata
+{
+	QString ride;
+	QString price;
+	QString comp;
+	QString sold;
+};
+
 
 class db : public QDialog//, public Ui::db
 {
@@ -13,8 +29,42 @@ class db : public QDialog//, public Ui::db
 
 public:
 	db(QWidget *parent = Q_NULLPTR);
-	void set_test(QString a);
+	void set_test(std::string a);
 	~db();
+	bool setdb(std::string filename);
+	bdata parse(std::string str);
+	QString parseunit(std::string str);
+	void showdb(std::vector<bdata> a);
+	QStandardItem * toItem(QString a);
+	////////////////// NEED TO WATCH HOW DOES VECTOR WORK YO BRING OUT DATA FROM IT TO WIDGET
+
+private:
+	Ui::db ui;
+	QStandardItemModel *table;
+	QStandardItem *cell;
+	std::vector<bdata> daba;
+};
+
+
+
+
+
+
+
+
+
+
+						//		Before stupid attempt		//
+						/*
+class db : public QDialog//, public Ui::db
+{
+	Q_OBJECT
+
+public:
+	db(QWidget *parent = Q_NULLPTR);
+	void set_test(std::string a);
+	~db();
+
 
 private:
 	Ui::db ui;
@@ -39,7 +89,7 @@ public:
 
 private:
 	std::vector<bdata> db;
-};
+};						*/
 
 /*DaBa::DaBa()
 {
