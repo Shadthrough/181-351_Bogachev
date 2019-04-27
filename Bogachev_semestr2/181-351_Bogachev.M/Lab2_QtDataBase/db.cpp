@@ -92,7 +92,7 @@ void db::showdb(std::vector<bdata> a)
 
 void db::set_test(std::string a)
 {
-	ui.testb->setText(parseunit(a)); ///////////////////////////	DO A Test check on parse here  /// done
+	//ui.testb->setText(parseunit(a)); ///////////////////////////	DO A Test check on parse here  /// done
 }
 
 bdata db/*DaBa*/::parse(std::string str)
