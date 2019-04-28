@@ -15,6 +15,7 @@ void Lab2_QtDataBase::on_butt_clicked()
 	password = ui.pass->text();
 	if (login == "admin" && password == "admin")
 	{
+		hide();
 		st_win.set_login(login);
 		st_win.set_password(password);
 		st_win.show();

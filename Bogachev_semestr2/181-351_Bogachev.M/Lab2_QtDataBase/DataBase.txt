@@ -1,3 +1,4 @@
 ride:112,price:100$,comp:RR,sold:sold
-ride:113,price:200$,comp:RR,sold:not soled
+ride:113,price:200$,comp:RR,sold:not sold
 ride:114,price:1000$,comp:RR,sold:sold
+ride:115,price:250$,comp:SS,sold:not sold

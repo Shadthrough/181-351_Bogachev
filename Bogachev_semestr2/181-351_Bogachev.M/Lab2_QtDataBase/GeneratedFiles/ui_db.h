@@ -12,55 +12,96 @@
 #include <QtCore/QVariant>
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QDialog>
-#include <QtWidgets/QHBoxLayout>
+#include <QtWidgets/QGridLayout>
 #include <QtWidgets/QHeaderView>
+#include <QtWidgets/QLineEdit>
 #include <QtWidgets/QPushButton>
 #include <QtWidgets/QTableView>
-#include <QtWidgets/QWidget>
+#include <QtWidgets/QVBoxLayout>
 
 QT_BEGIN_NAMESPACE
 
 class Ui_db
 {
 public:
+    QGridLayout *gridLayout;
     QTableView *tableui;
-    QWidget *widget;
-    QHBoxLayout *horizontalLayout;
-    QPushButton *pushButton;
-    QPushButton *pushButton_2;
-    QPushButton *pushButton_3;
+    QVBoxLayout *verticalLayout;
+    QPushButton *addb;
+    QPushButton *findb;
+    QPushButton *delb;
+    QPushButton *refrb;
+    QLineEdit *trainl;
+    QLineEdit *pricel;
+    QPushButton *editb;
+    QLineEdit *compl;
+    QLineEdit *soldl;
 
     void setupUi(QDialog *db)
     {
         if (db->objectName().isEmpty())
             db->setObjectName(QString::fromUtf8("db"));
-        db->resize(400, 300);
+        db->resize(462, 314);
+        gridLayout = new QGridLayout(db);
+        gridLayout->setSpacing(6);
+        gridLayout->setContentsMargins(11, 11, 11, 11);
+        gridLayout->setObjectName(QString::fromUtf8("gridLayout"));
         tableui = new QTableView(db);
         tableui->setObjectName(QString::fromUtf8("tableui"));
-        tableui->setGeometry(QRect(40, 20, 301, 211));
         tableui->setShowGrid(true);
-        widget = new QWidget(db);
-        widget->setObjectName(QString::fromUtf8("widget"));
-        widget->setGeometry(QRect(60, 240, 271, 19));
-        horizontalLayout = new QHBoxLayout(widget);
-        horizontalLayout->setSpacing(6);
-        horizontalLayout->setContentsMargins(11, 11, 11, 11);
-        horizontalLayout->setObjectName(QString::fromUtf8("horizontalLayout"));
-        horizontalLayout->setContentsMargins(0, 0, 0, 0);
-        pushButton = new QPushButton(widget);
-        pushButton->setObjectName(QString::fromUtf8("pushButton"));
 
-        horizontalLayout->addWidget(pushButton);
+        gridLayout->addWidget(tableui, 0, 0, 1, 4);
 
-        pushButton_2 = new QPushButton(widget);
-        pushButton_2->setObjectName(QString::fromUtf8("pushButton_2"));
+        verticalLayout = new QVBoxLayout();
+        verticalLayout->setSpacing(6);
+        verticalLayout->setObjectName(QString::fromUtf8("verticalLayout"));
+        addb = new QPushButton(db);
+        addb->setObjectName(QString::fromUtf8("addb"));
 
-        horizontalLayout->addWidget(pushButton_2);
+        verticalLayout->addWidget(addb);
 
-        pushButton_3 = new QPushButton(widget);
-        pushButton_3->setObjectName(QString::fromUtf8("pushButton_3"));
+        findb = new QPushButton(db);
+        findb->setObjectName(QString::fromUtf8("findb"));
 
-        horizontalLayout->addWidget(pushButton_3);
+        verticalLayout->addWidget(findb);
+
+        delb = new QPushButton(db);
+        delb->setObjectName(QString::fromUtf8("delb"));
+
+        verticalLayout->addWidget(delb);
+
+
+        gridLayout->addLayout(verticalLayout, 1, 0, 2, 1);
+
+        refrb = new QPushButton(db);
+        refrb->setObjectName(QString::fromUtf8("refrb"));
+
+        gridLayout->addWidget(refrb, 1, 1, 1, 1);
+
+        trainl = new QLineEdit(db);
+        trainl->setObjectName(QString::fromUtf8("trainl"));
+
+        gridLayout->addWidget(trainl, 1, 2, 1, 1);
+
+        pricel = new QLineEdit(db);
+        pricel->setObjectName(QString::fromUtf8("pricel"));
+
+        gridLayout->addWidget(pricel, 1, 3, 1, 1);
+
+        editb = new QPushButton(db);
+        editb->setObjectName(QString::fromUtf8("editb"));
+
+        gridLayout->addWidget(editb, 2, 1, 1, 1);
+
+        compl = new QLineEdit(db);
+        compl->setObjectName(QString::fromUtf8("compl"));
+
+        gridLayout->addWidget(compl, 2, 2, 1, 1);
+
+        soldl = new QLineEdit(db);
+        soldl->setObjectName(QString::fromUtf8("soldl"));
+
+        gridLayout->addWidget(soldl, 2, 3, 1, 1);
 
 
         retranslateUi(db);
@@ -71,9 +112,15 @@ public:
     void retranslateUi(QDialog *db)
     {
         db->setWindowTitle(QApplication::translate("db", "db", nullptr));
-        pushButton->setText(QApplication::translate("db", "PushButton", nullptr));
-        pushButton_2->setText(QApplication::translate("db", "PushButton", nullptr));
-        pushButton_3->setText(QApplication::translate("db", "PushButton", nullptr));
+        addb->setText(QApplication::translate("db", "Add", nullptr));
+        findb->setText(QApplication::translate("db", "Find", nullptr));
+        delb->setText(QApplication::translate("db", "Delete", nullptr));
+        refrb->setText(QApplication::translate("db", "Refresh", nullptr));
+        trainl->setPlaceholderText(QApplication::translate("db", "Train", nullptr));
+        pricel->setPlaceholderText(QApplication::translate("db", "Price", nullptr));
+        editb->setText(QApplication::translate("db", "Edit", nullptr));
+        compl->setPlaceholderText(QApplication::translate("db", "Company", nullptr));
+        soldl->setPlaceholderText(QApplication::translate("db", "Sold/Not sold", nullptr));
     } // retranslateUi
 
 };

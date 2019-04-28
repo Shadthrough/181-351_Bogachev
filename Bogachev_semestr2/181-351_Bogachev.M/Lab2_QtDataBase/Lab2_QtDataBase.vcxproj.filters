@@ -42,6 +42,9 @@
     <ClCompile Include="db.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="inputw.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="Lab2_QtDataBase.h">
@@ -53,6 +56,9 @@
     <QtMoc Include="db.h">
       <Filter>Header Files</Filter>
     </QtMoc>
+    <QtMoc Include="inputw.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
   </ItemGroup>
   <ItemGroup>
     <QtUic Include="Lab2_QtDataBase.ui">
@@ -62,6 +68,9 @@
       <Filter>Form Files</Filter>
     </QtUic>
     <QtUic Include="db.ui">
+      <Filter>Form Files</Filter>
+    </QtUic>
+    <QtUic Include="inputw.ui">
       <Filter>Form Files</Filter>
     </QtUic>
   </ItemGroup>

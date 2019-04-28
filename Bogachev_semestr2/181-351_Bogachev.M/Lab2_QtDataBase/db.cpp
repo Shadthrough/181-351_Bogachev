@@ -11,16 +11,8 @@ db::db(QWidget *parent)
 db::~db()
 {
 }
-
-//DaBa::DaBa()
-//{
-//}
-
-//DaBa::~DaBa()
-//{
-//}
-
-bool db/*DaBa*/::setdb(std::string filename)
+//set db
+bool db::setdb(std::string filename)
 {
 	std::fstream f;
 	f.open(filename);
@@ -37,6 +29,11 @@ bool db/*DaBa*/::setdb(std::string filename)
 	return true;
 }
 
+
+void db::connect_to_serv()
+{
+	socket->connectToHost("127.0.0.1", 33333);
+}
 
 QString db::parseunit(std::string str)
 {
@@ -95,7 +92,41 @@ void db::set_test(std::string a)
 	//ui.testb->setText(parseunit(a)); ///////////////////////////	DO A Test check on parse here  /// done
 }
 
-bdata db/*DaBa*/::parse(std::string str)
+void db::add(bdata a)
+{
+	std::fstream f;
+	f.open("DataBase.txt", std::ios::app);
+	std::string str, tmp;
+	str = "ride:";
+	tmp = a.ride.toUtf8().constData();
+	str.append(tmp + ",price:");
+	tmp = a.price.toUtf8().constData();
+	str.append(tmp + ",comp:");
+	tmp = a.comp.toUtf8().constData();
+	str.append(tmp + ",sold:");
+	tmp = a.sold.toUtf8().constData();
+	str.append(tmp);
+	f << std::endl << str;
+	f.close();
+}
+
+void db::on_addb_clicked()
+{
+	bdata a;
+	a.ride = ui.trainl->text();
+	a.price = ui.pricel->text();
+	a.comp = ui.compl->text();
+	a.sold = ui.soldl->text();
+	add(a);
+}
+
+void db::on_editb_clicked()
+{
+
+}
+
+//parse
+bdata db::parse(std::string str)
 {
 	bdata a;
 	QString temp;

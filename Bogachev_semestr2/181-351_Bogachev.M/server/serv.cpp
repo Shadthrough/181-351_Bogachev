@@ -38,7 +38,8 @@ void MyTcpServer::slotServerRead() {
 		std::string message;
 		message = array.toStdString();
 		qDebug() << QString::fromStdString(message);
-		message.find(';')
+		message.find('::');
+
 
 		/*// <name_of_function>&<log>&<pass>
 

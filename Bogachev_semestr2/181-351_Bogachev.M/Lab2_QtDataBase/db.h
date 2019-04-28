@@ -3,6 +3,9 @@
 #include <QDialog>
 #include <QWidget>
 #include <QStandardItemModel>
+#include <QTcpSocket>
+#include <QByteArray>
+#include <QDebug>
 #include <QStandardItem>
 #include <QTableView>
 #include <QAbstractItemModel>
@@ -13,6 +16,7 @@
 #include <QFile>
 #include <QTextStream>
 #include "ui_db.h"
+//										Maybe QObject as well
 
 struct bdata
 {
@@ -36,13 +40,18 @@ public:
 	QString parseunit(std::string str);
 	void showdb(std::vector<bdata> a);
 	QStandardItem * toItem(QString a);
-	////////////////// NEED TO WATCH HOW DOES VECTOR WORK YO BRING OUT DATA FROM IT TO WIDGET
+	void connect_to_serv();
+	void add(bdata a);
+private slots:
+	void on_addb_clicked();
+	void on_editb_clicked();
 
 private:
 	Ui::db ui;
 	QStandardItemModel *table;
 	QStandardItem *cell;
 	std::vector<bdata> daba;
+	QTcpSocket * socket;
 };
 
 

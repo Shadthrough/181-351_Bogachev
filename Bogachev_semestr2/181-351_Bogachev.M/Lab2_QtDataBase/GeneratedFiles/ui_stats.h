@@ -41,19 +41,18 @@ public:
     QHBoxLayout *horizontalLayout;
     QPushButton *editb;
     QPushButton *viewb;
-    QPushButton *ser;
 
     void setupUi(QWidget *stats)
     {
         if (stats->objectName().isEmpty())
             stats->setObjectName(QString::fromUtf8("stats"));
-        stats->resize(400, 300);
+        stats->resize(351, 188);
         groupBox = new QGroupBox(stats);
         groupBox->setObjectName(QString::fromUtf8("groupBox"));
-        groupBox->setGeometry(QRect(40, 40, 300, 141));
+        groupBox->setGeometry(QRect(20, 20, 300, 141));
         layoutWidget = new QWidget(groupBox);
         layoutWidget->setObjectName(QString::fromUtf8("layoutWidget"));
-        layoutWidget->setGeometry(QRect(90, 20, 120, 107));
+        layoutWidget->setGeometry(QRect(70, 20, 171, 107));
         verticalLayout = new QVBoxLayout(layoutWidget);
         verticalLayout->setSpacing(6);
         verticalLayout->setContentsMargins(11, 11, 11, 11);
@@ -69,6 +68,8 @@ public:
 
         usrnmv = new QLabel(layoutWidget);
         usrnmv->setObjectName(QString::fromUtf8("usrnmv"));
+        usrnmv->setLayoutDirection(Qt::LeftToRight);
+        usrnmv->setAlignment(Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter);
 
         formLayout->setWidget(0, QFormLayout::FieldRole, usrnmv);
 
@@ -79,6 +80,8 @@ public:
 
         pssv = new QLabel(layoutWidget);
         pssv->setObjectName(QString::fromUtf8("pssv"));
+        pssv->setLayoutDirection(Qt::LeftToRight);
+        pssv->setAlignment(Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter);
 
         formLayout->setWidget(1, QFormLayout::FieldRole, pssv);
 
@@ -89,11 +92,15 @@ public:
 
         acclvlv = new QLabel(layoutWidget);
         acclvlv->setObjectName(QString::fromUtf8("acclvlv"));
+        acclvlv->setLayoutDirection(Qt::LeftToRight);
+        acclvlv->setAlignment(Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter);
 
         formLayout->setWidget(2, QFormLayout::FieldRole, acclvlv);
 
         regdatev = new QLabel(layoutWidget);
         regdatev->setObjectName(QString::fromUtf8("regdatev"));
+        regdatev->setLayoutDirection(Qt::LeftToRight);
+        regdatev->setAlignment(Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter);
 
         formLayout->setWidget(3, QFormLayout::FieldRole, regdatev);
 
@@ -117,6 +124,7 @@ public:
         horizontalLayout->setObjectName(QString::fromUtf8("horizontalLayout"));
         editb = new QPushButton(layoutWidget);
         editb->setObjectName(QString::fromUtf8("editb"));
+        editb->setAutoFillBackground(false);
 
         horizontalLayout->addWidget(editb);
 
@@ -128,13 +136,6 @@ public:
 
         verticalLayout->addLayout(horizontalLayout);
 
-        ser = new QPushButton(stats);
-        ser->setObjectName(QString::fromUtf8("ser"));
-        ser->setGeometry(QRect(120, 210, 141, 41));
-        QFont font;
-        font.setBold(true);
-        font.setWeight(75);
-        ser->setFont(font);
 
         retranslateUi(stats);
 
@@ -153,9 +154,8 @@ public:
         acclvlv->setText(QApplication::translate("stats", "TextLabel", nullptr));
         regdatev->setText(QApplication::translate("stats", "TextLabel", nullptr));
         regdate->setText(QApplication::translate("stats", "Registration date:", nullptr));
-        editb->setText(QApplication::translate("stats", "Edit list", nullptr));
-        viewb->setText(QApplication::translate("stats", "View list", nullptr));
-        ser->setText(QApplication::translate("stats", "Server test", nullptr));
+        editb->setText(QApplication::translate("stats", "View users table", nullptr));
+        viewb->setText(QApplication::translate("stats", "View trains table", nullptr));
     } // retranslateUi
 
 };
