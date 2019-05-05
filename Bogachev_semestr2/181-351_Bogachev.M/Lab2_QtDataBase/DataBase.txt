@@ -1,4 +1,6 @@
-ride:112,price:100$,comp:RR,sold:sold
-ride:113,price:200$,comp:RR,sold:not sold
-ride:114,price:1000$,comp:RR,sold:sold
-ride:115,price:250$,comp:SS,sold:not sold
+ride:112,price:100,comp:RR,sold:sold
+ride:228,price:322,comp:SONY,sold:sold
+ride:137,price:8822,comp:SR,sold:sold
+ride:322,price:10000,comp:GUCCI,sold:not sold
+ride:188,price:456,comp:ROLF,sold:sold
+ride:12345,price:123,comp:Rama,sold:sold

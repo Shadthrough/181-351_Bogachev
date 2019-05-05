@@ -15,6 +15,9 @@
 #include <fstream>
 #include <QFile>
 #include <QTextStream>
+#include "editreq.h"
+#include "inputw.h"
+#include "inpdel.h"
 #include "ui_db.h"
 //										Maybe QObject as well
 
@@ -42,9 +45,23 @@ public:
 	QStandardItem * toItem(QString a);
 	void connect_to_serv();
 	void add(bdata a);
+	void del(int a);
+	bdata get_line_data(int a);
+	void save();
+	void refr();
+
 private slots:
 	void on_addb_clicked();
 	void on_editb_clicked();
+	void on_delb_clicked();
+	void on_editcancb_clicked();
+	void on_editsubmb_clicked();
+	void on_findb_clicked();
+	void on_findb_2_clicked();
+	void on_findcancb_clicked();
+	void on_findsubmb_clicked();
+	void on_findcancb_2_clicked();
+	void on_findsubmb_2_clicked();
 
 private:
 	Ui::db ui;
@@ -52,6 +69,7 @@ private:
 	QStandardItem *cell;
 	std::vector<bdata> daba;
 	QTcpSocket * socket;
+	//editinp eiwin;
 };
 
 

@@ -19,11 +19,11 @@ MyTcpServer::MyTcpServer(QObject *parent) : QObject(parent) {
 void MyTcpServer::slotNewConnection() {
 	if (server_status == 1) {
 		QTcpSocket* clientSocket = mTcpServer->nextPendingConnection();
-		int idusersocs = (int)clientSocket->socketDescriptor();
-		SClients[idusersocs] = clientSocket;
-		SClients[idusersocs]->write("Hello!\n");
-		connect(SClients[idusersocs], &QTcpSocket::readyRead, this, &MyTcpServer::slotServerRead);
-		connect(SClients[idusersocs], &QTcpSocket::disconnected, this, &MyTcpServer::slotClientDisconnected);
+		int id_user_socs = (int)clientSocket->socketDescriptor();
+		SClients[id_user_socs] = clientSocket;
+		SClients[id_user_socs]->write("Hello!\n");
+		connect(SClients[id_user_socs], &QTcpSocket::readyRead, this, &MyTcpServer::slotServerRead);
+		connect(SClients[id_user_socs], &QTcpSocket::disconnected, this, &MyTcpServer::slotClientDisconnected);
 	}
 }
 

@@ -9,3 +9,39 @@ inputw::inputw(QWidget *parent)
 inputw::~inputw()
 {
 }
+
+void inputw::on_okb_clicked()
+{
+	if(ui.trainl->text() != "" && ui.compl->text() != "" && ui.pricel->text() != "" && ui.soldl->text() != "")
+		close();
+	else
+		QMessageBox::critical(this, "Alert", "Please, fill in all the lines.");
+}
+
+QString inputw::get_ride()
+{
+	QString a;
+	a = ui.trainl->text();
+	return a;
+}
+
+QString inputw::get_price()
+{
+	QString a;
+	a = ui.pricel->text();
+	return a;
+}
+
+QString inputw::get_comp()
+{
+	QString a;
+	a = ui.compl->text();
+	return a;
+}
+
+QString inputw::get_sold()
+{
+	QString a;
+	a = ui.soldl->text();
+	return a;
+}

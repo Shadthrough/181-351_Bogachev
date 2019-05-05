@@ -1,4 +1,8 @@
 ﻿#include "db.h"
+/*	TBD
+Refresh must be done on it; // DONE
+Do a find on a separate units; // DONE
+*/
 
 db::db(QWidget *parent)
 	: QDialog(parent)
@@ -6,6 +10,9 @@ db::db(QWidget *parent)
 	ui.setupUi(this);
 	setdb("DataBase.txt");
 	showdb(daba);
+	ui.edit->close();
+	ui.find->close();
+	ui.find_2->close();
 }
 
 db::~db()
@@ -26,6 +33,7 @@ bool db::setdb(std::string filename)
 		std::getline(f, tmp);
 		daba.push_back(parse(tmp));
 	}
+	f.close();
 	return true;
 }
 
@@ -59,7 +67,7 @@ void db::showdb(std::vector<bdata> a)
 	table = new QStandardItemModel;
 	QStringList head;
 	head.append("Train");
-	head.append("Price");
+	head.append("Price, $");
 	head.append("Company");
 	head.append("Status");
 
@@ -113,16 +121,214 @@ void db::add(bdata a)
 void db::on_addb_clicked()
 {
 	bdata a;
-	a.ride = ui.trainl->text();
-	a.price = ui.pricel->text();
-	a.comp = ui.compl->text();
-	a.sold = ui.soldl->text();
-	add(a);
+	inputw win;
+	win.setModal(true);
+	win.exec();
+	a.ride = win.get_ride();//win.trainl->text();
+	a.price = win.get_price();//a.price = win.pricel->text();
+	a.comp = win.get_comp();//a.comp = win.compl->text();
+	a.sold = win.get_sold();//a.sold = win.soldl->text();
+	if (a.comp != "" && a.price != "" && a.ride != "" && a.sold != "")
+	{
+		add(a);
+	}
+	refr();
+}
+
+bdata db::get_line_data(int a)
+{
+	bdata tmp;
+	/*int i = 0;
+	QModelIndex indx = ui.tableui->model()->index(a, i);
+	tmp.ride = indx.data().toString;
+	i++;
+	indx = ui.tableui->model()->index(a, i);
+	tmp.price = indx.data().toString;
+	i++;
+	indx = ui.tableui->model()->index(a, i);
+	tmp.comp = indx.data().toString;
+	i++;
+	indx = ui.tableui->model()->index(a, i);
+	tmp.sold = indx.data().toString;*/
+	return tmp;
+}
+
+void db::save()
+{
+	remove("Database.txt");
+	std::ofstream kostil("DataBase.txt");
+	kostil.close();
+	std::fstream f;
+	f.open("DataBase.txt");
+	std::string str, tmp;
+	for (int i = 0; i < daba.size(); i++)
+	{
+	
+		str = "ride:";
+		tmp = daba[i].ride.toStdString();
+		str.append(tmp + ",price:");
+		tmp = daba[i].price.toStdString();
+		str.append(tmp + ",comp:");
+		tmp = daba[i].comp.toStdString();
+		str.append(tmp + ",sold:");
+		tmp = daba[i].sold.toStdString();
+		str.append(tmp);
+		f << str;
+		if (i != daba.size() - 1)
+			f << std::endl;
+	}
+	f.close();
+}
+
+void db::on_editcancb_clicked()
+{
+	ui.edit->close();
+}
+
+void db::on_editsubmb_clicked()
+{
+	int i = ui.numt->text().toInt() - 1;
+	daba[i].ride = ui.trainel->text();
+	daba[i].price = ui.pricel->text();
+	daba[i].comp = ui.compel->text();
+	daba[i].sold = ui.soldel->text();
+	save();
+	//QMessageBox::about(this, "Info", "Editing was successful, please press the refresh button.");
+	ui.edit->close();
+	refr();
 }
 
 void db::on_editb_clicked()
 {
+	editreq win;
+	win.setModal(true);
+	win.exec();
+	//eiwin.set_train(ui.tableui->)
+	int num = win.get_num();
+	if (num == NULL)
+		return;
+	ui.edit->show();
+	std::string stnum;
+	//char * chn;
+	//itoa(num, chn, 10);
+	stnum = std::to_string(num);
+	QString snum = QString::fromStdString(stnum);
+	ui.numt->setText(snum);
+	ui.trainel->setText(daba[num - 1].ride);
+	ui.pricel->setText(daba[num - 1].price);
+	ui.compel->setText(daba[num - 1].comp);
+	ui.soldel->setText(daba[num - 1].sold);
+}
 
+void db::del(int a)
+{
+	remove("Database.txt");
+	std::ofstream kostil("DataBase.txt");
+	kostil.close();
+	std::fstream f;
+	f.open("DataBase.txt");
+	std::string str, tmp;
+	for (int i = 0; i < daba.size(); i++)
+	{
+		if (i != a - 1)
+		{
+			str = "ride:";
+			tmp = daba[i].ride.toStdString();
+			str.append(tmp + ",price:");
+			tmp = daba[i].price.toStdString();
+			str.append(tmp + ",comp:");
+			tmp = daba[i].comp.toStdString();
+			str.append(tmp + ",sold:");
+			tmp = daba[i].sold.toStdString();
+			str.append(tmp);
+			f << str;
+			if(i != daba.size() - 1)
+				f << std::endl;
+		}
+	}
+	f.close();
+}
+
+void db::on_findb_2_clicked()
+{
+	ui.find_2->show();
+}
+
+void db::on_findcancb_2_clicked()
+{
+	refr();
+	ui.find_2->close();
+}
+
+void db::on_findsubmb_2_clicked()
+{
+	bool not_found;
+	for (int i = 0; i < daba.size(); i++)
+	{
+		if ((daba[i].ride != ui.trainel_2->text() && ui.trainel_2->text() != "")
+			|| (daba[i].price != ui.pricel_2->text() && ui.pricel_2->text() != "")
+			|| (daba[i].comp != ui.compel_2->text() && ui.compel_2->text() != "")
+			|| (daba[i].sold != ui.soldel_2->text() && ui.soldel_2->text() != ""))
+		{
+			daba.erase(daba.begin() + i);
+			i--;
+		}
+	}
+	if (daba.empty())
+		QMessageBox::critical(this, "Alert", "No matches found.");
+	else
+		showdb(daba);
+	daba.clear();
+	setdb("DataBase.txt");
+}
+
+void db::on_delb_clicked()
+{
+	inpdel win;
+	win.setModal(true);
+	win.exec();
+	del(win.get_num());
+	refr();
+}
+
+void db::on_findsubmb_clicked()
+{
+	bool not_found;
+	for (int i = 0; i < daba.size(); i++)
+	{
+		if (daba[i].ride != ui.findl->text()
+		&& daba[i].price != ui.findl->text()
+		&& daba[i].comp != ui.findl->text()
+		&& daba[i].sold != ui.findl->text())
+		{
+			daba.erase(daba.begin() + i);
+			i--;
+		}
+	}
+	if (daba.empty())
+		QMessageBox::critical(this, "Alert", "No matches found.");
+	else
+		showdb(daba);
+	daba.clear();
+	setdb("DataBase.txt");
+}
+
+void db::on_findcancb_clicked()
+{
+	refr();
+	ui.find->close();
+}
+
+void db::on_findb_clicked()
+{
+	ui.find->show();
+}
+
+void db::refr()
+{
+	daba.clear();
+	setdb("DataBase.txt");
+	showdb(daba);
 }
 
 //parse
