@@ -1,47 +1,127 @@
+//#define Q_FOREACH
 #include "serv.h"
-#include <QDebug>
 #include <QCoreApplication>
 #include <Qstring>
 
-MyTcpServer::MyTcpServer(QObject *parent) : QObject(parent) {
-	mTcpServer = new QTcpServer(this);
-	connect(mTcpServer, &QTcpServer::newConnection, this, &MyTcpServer::slotNewConnection);
 
-	if (!mTcpServer->listen(QHostAddress::Any, 33333)) {
+MyTcpServer::MyTcpServer(QObject *parent) : QObject(parent) {
+	server = new QTcpServer(this);
+	connect(server, &QTcpServer::newConnection, this, &MyTcpServer::slotNewConnection);
+
+	if (!server->listen(QHostAddress::Any, 33333)) 
+	{
 		qDebug() << "server is not started";
 	}
-	else {
+	else 
+	{
 		server_status = 1;
 		qDebug() << "server is started";
 	}
+
+
+	/*QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE");
+	db.setDatabaseName("DataBase");
+	if (!db.open())
+		qDebug() << db.lastError().text();
+
+	QSqlQuery query(db);
+	//создали таблицу
+	query.exec("CREATE TABLE Pricelist("
+		"ID INT NOT NULL, "
+		"Train INT NOT NULL,"
+		"Price MONEY NOT NULL,"
+		"Company VARCHAR (20) NOT NULL,"
+		"Status VARCHAR(10) NOT NULL"
+		")");
+
+	query.prepare("INSERT INTO Pricelist(id, train, price, company, status) "
+		"VALUES (:id, :train, :price, :company, :status)");
+
+	query.bindValue(":id", "12");
+	query.bindValue(":train", "177");
+	query.bindValue(":price", "1200");
+	query.bindValue(":company", "Google");
+	query.bindValue(":status", "Sold");
+	query.exec();
+	//query.exec("DROP TABLE Pricelist");
+	db.close();
+	//qDebug() << "You suck";*/
+	std::string str = "1:12:123:SR:Sold";
+	add(str);
 }
 
-void MyTcpServer::slotNewConnection() {
-	if (server_status == 1) {
-		QTcpSocket* clientSocket = mTcpServer->nextPendingConnection();
+void MyTcpServer::refresh(QTcpSocket * a)
+{
+	QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE");
+	db.setDatabaseName("DataBase");
+
+	if (db.open())
+		qDebug() << "db is open";
+
+	QSqlQuery query(db);
+	//query.exec("CREATE TABLE Pricelist(ID INT NOT NULL, Train INT NOT NULL, Price MONEY NOT NULL, Company VARCHAR(20) NOT NULL, Status VARCHAR(10))");
+	//query.exec("INERT INTO Priselist VALUES (1, 125, 200, SR, Sold)");
+	QByteArray data;
+	while (query.next())
+	{
+		data = "ID:";
+		data.append(query.value(0).toByteArray());
+		data.append(",:");
+		data.append(query.value(1).toByteArray());
+		data.append(",:");
+		data.append(query.value(2).toByteArray());
+		data.append(",:");
+		data.append(query.value(3).toByteArray());
+		data.append(",:");
+		data.append(query.value(4).toByteArray());
+		data.append("\n");
+	}
+	a->write(data);
+}
+
+void MyTcpServer::slotNewConnection() 
+{
+	if (server_status == 1) 
+	{
+		QTcpSocket* clientSocket = server->nextPendingConnection();
 		int id_user_socs = (int)clientSocket->socketDescriptor();
 		SClients[id_user_socs] = clientSocket;
-		SClients[id_user_socs]->write("Hello!\n");
-		connect(SClients[id_user_socs], &QTcpSocket::readyRead, this, &MyTcpServer::slotServerRead);
+		//SClients[id_user_socs]->write("Hello!\n");
+		connect(SClients[id_user_socs], &QTcpSocket::readyRead, this, &MyTcpServer::slotReadSocket);
 		connect(SClients[id_user_socs], &QTcpSocket::disconnected, this, &MyTcpServer::slotClientDisconnected);
+		qDebug() << id_user_socs << "Client connected";
 	}
 }
 
-void MyTcpServer::slotServerRead() {
+void MyTcpServer::slotReadSocket() 
+{
 	QTcpSocket *clientSocket = (QTcpSocket*)sender();
 	int id = (int)clientSocket->socketDescriptor();
 	while (clientSocket->bytesAvailable() > 0)
 	{
 		QByteArray array = clientSocket->readAll();
-		/*std::string log = "";
-		//std::string pass = "";*/
 		std::string message;
 		message = array.toStdString();
 		qDebug() << QString::fromStdString(message);
-		message.find('::');
+		std::string func = message.substr(0, message.find('|'));
+		if (func == "add")
+			add(message.erase(0, message.find('|') + 1));
+		else if (func == "delete")
+			del(message.erase(0, message.find('|') + 1));
+		else if (func == "edit")
+			edit(message.erase(0, message.find('|') + 1));
+		//else if (func == "findtext")
+		//	find_text(message.erase(0, message.find('|') + 1));
+		//else if (func == "find")
+		//	find(message.erase(0, message.find('|') + 1));
+		else if (func == "refresh")
+			refresh(clientSocket);
+		//else if (func == "showusers")
+		//	showUsers
+		//else
+		//	retrn;///////
 
-
-		/*// <name_of_function>&<log>&<pass>
+		/*<name_of_function>&<log>&<pass>
 
 			//find name_of_function;
 		//int pos = message.find("&");
@@ -75,23 +155,192 @@ void MyTcpServer::slotServerRead() {
 
 MyTcpServer::~MyTcpServer()
 {
-	foreach(int i, SClients.keys()) {
+	//QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE");
+	//db.close();///////////////////////////////////////////////////////////////////////////////////////////////
+	foreach (int i, SClients.keys()) 
+	{
 		QTextStream os(SClients[i]);
 		SClients[i]->close();
 		SClients.remove(i);
 	}
 	server_status = 0;
-	mTcpServer->close();
+	server->close();
 }
 
-void MyTcpServer::slotClientDisconnected() {
+void MyTcpServer::slotClientDisconnected() 
+{
 	QTcpSocket *clientSocket = (QTcpSocket*)sender();
 	int id = (int)clientSocket->socketDescriptor();
 	clientSocket->close();
 	SClients.remove(id);
-	qDebug() << QString::fromUtf8("Client is disconnected \n");
+	qDebug() << "Client " << id << " has disconnected";
 }
 
+/*------------------Add----------------------;*/
+void MyTcpServer::add(std::string a)
+{
+	QString id, train, price, comp, stat;
+	id = QString::fromStdString(a.substr(0, a.find(':')));
+	a.erase(0, a.find(":") + 1);
+	train = QString::fromStdString(a.substr(0, a.find(':')));
+	a.erase(0, a.find(":") + 1);
+	price = QString::fromStdString(a.substr(0, a.find(':')));
+	a.erase(0, a.find(":") + 1);
+	comp = QString::fromStdString(a.substr(0, a.find(':')));
+	a.erase(0, a.find(":") + 1);
+	stat = QString::fromStdString(a);
+	QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE");
+	db.setDatabaseName("DataBase");
+	if (!db.open())
+		qDebug() << db.lastError().text();
+
+	QSqlQuery query(db);
+	query.exec("CREATE TABLE Pricelist("
+		"ID INT NOT NULL, "
+		"Train INT NOT NULL,"
+		"Price MONEY NOT NULL,"
+		"Company VARCHAR (20) NOT NULL,"
+		"Status VARCHAR(10) NOT NULL"
+		")");
+
+	query.prepare("INSERT INTO Pricelist(id, train, price, company, status) "
+		"VALUES (:id, :train, :price, :company, :status)");
+
+	query.bindValue(":id", id);
+	query.bindValue(":train", train);
+	query.bindValue(":price", price);
+	query.bindValue(":company", comp);
+	query.bindValue(":status", stat);
+	query.exec();
+	//query.exec("DROP TABLE Pricelist");
+	db.close();
+	//qDebug() << "You suck";*/
+}
+
+/*-------------------------Edit--------------------------*/
+void MyTcpServer::edit(std::string a)
+{
+	QString id, train, price, comp, stat;
+	id = QString::fromStdString(a.substr(0, a.find(':')));
+	a.erase(0, a.find(":") + 1);
+	train = QString::fromStdString(a.substr(0, a.find(':')));
+	a.erase(0, a.find(":") + 1);
+	price = QString::fromStdString(a.substr(0, a.find(':')));
+	a.erase(0, a.find(":") + 1);
+	comp = QString::fromStdString(a.substr(0, a.find(':')));
+	a.erase(0, a.find(":") + 1);
+	stat = QString::fromStdString(a);
+	QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE");
+	db.setDatabaseName("DataBase");
+	if (!db.open())
+		qDebug() << db.lastError().text();
+
+	QSqlQuery query(db);
+	query.exec("CREATE TABLE Pricelist("
+		"ID INT NOT NULL, "
+		"Train INT NOT NULL,"
+		"Price MONEY NOT NULL,"
+		"Company VARCHAR (20) NOT NULL,"
+		"Status VARCHAR(10) NOT NULL"
+		")");
+
+	query.prepare("UPDATE Pricelist SET train = :train WHERE id = :id");
+	query.bindValue(":id", id);
+	query.bindValue(":train", train);
+	query.exec();
+	query.prepare("UPDATE Pricelist SET price = :price WHERE id = :id");
+	query.bindValue(":id", id);
+	query.bindValue(":price", price);
+	query.exec();
+	query.prepare("UPDATE Pricelist SET company = :company WHERE id = :id");
+	query.bindValue(":id", id);
+	query.bindValue(":company", comp);
+	query.exec();
+	query.prepare("UPDATE Pricelist SET status = :status WHERE id = :id");
+	query.bindValue(":id", id);
+	query.bindValue(":status", stat);
+	query.exec();
+	//query.exec("DROP TABLE Pricelist");
+	db.close();
+	//qDebug() << "You suck";*/
+}//*/
+
+/*------------------------Delete-------------------------*/
+void MyTcpServer::del(std::string a)
+{
+	QString id = QString::fromStdString(a);
+	QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE");
+	db.setDatabaseName("DataBase");
+	if (!db.open())
+		qDebug() << db.lastError().text();
+
+	QSqlQuery query(db);
+	query.exec("CREATE TABLE Pricelist("
+		"ID INT NOT NULL, "
+		"Train INT NOT NULL,"
+		"Price MONEY NOT NULL,"
+		"Company VARCHAR (20) NOT NULL,"
+		"Status VARCHAR(10) NOT NULL"
+		")");
+
+	query.prepare("DELETE FROM Pricelist WHERE id = :id");
+	query.bindValue(":id", id);
+	query.exec();
+	//query.exec("DROP TABLE Pricelist");
+	db.close();
+	//qDebug() << "You suck";*/
+}//*/
+
+/*-----------------FindText------------------------
+void db::on_findsubmb_clicked()
+{
+	bool not_found;
+	for (int i = 0; i < daba.size(); i++)
+	{
+		if (daba[i].ride != ui.findl->text()
+			&& daba[i].price != ui.findl->text()
+			&& daba[i].comp != ui.findl->text()
+			&& daba[i].sold != ui.findl->text())
+		{
+			daba.erase(daba.begin() + i);
+			i--;
+		}
+	}
+	if (daba.empty())
+		QMessageBox::critical(this, "Alert", "No matches found.");
+	else
+		showdb(daba);
+	daba.clear();
+	setdb("DataBase.txt");
+}*/
+
+/*------------------Find--------------------------------
+void db::on_findsubmb_2_clicked()
+{
+	bool not_found;
+	for (int i = 0; i < daba.size(); i++)
+	{
+		if ((daba[i].ride != ui.trainel_2->text() && ui.trainel_2->text() != "")
+			|| (daba[i].price != ui.pricel_2->text() && ui.pricel_2->text() != "")
+			|| (daba[i].comp != ui.compel_2->text() && ui.compel_2->text() != "")
+			|| (daba[i].sold != ui.soldel_2->text() && ui.soldel_2->text() != ""))
+		{
+			daba.erase(daba.begin() + i);
+			i--;
+		}
+	}
+	if (daba.empty())
+		QMessageBox::critical(this, "Alert", "No matches found.");
+	else
+		showdb(daba);
+	daba.clear();
+	setdb("DataBase.txt");
+}*/
+
+
+
+
+/*
 //myserver::myserver() {}
 //
 //myserver::~myserver() {}
@@ -133,7 +382,7 @@ void MyTcpServer::slotClientDisconnected() {
 //	socket->deleteLater();
 //}
 
-/*///////////////////////////////////////////////////////////////////////// OLD
+///////////////////////////////////////////////////////////////////////// OLD
 #include <QDebug> 
 
 MyTcpServer::~MyTcpServer()
@@ -165,9 +414,9 @@ void MyTcpServer::slotServerRead() {
 	}
 	mTcpSocket->write(array);
 	// QByteArray::fromStdString((std::string)&temp) 
-	/* QTextStream os(mTcpSocket);
+	QTextStream os(mTcpSocket);
 	os.setAutoDetectUnicode(true);
-	os « "";*//*
+	os « "";
 }
 
 void MyTcpServer::slotNewConnection() {
@@ -185,5 +434,4 @@ void MyTcpServer::slotClientDisconnected() {
 		qDebug() << QString::fromUtf8("stop");
 		server_status = 0;
 	}
-}
-*/
+}*/

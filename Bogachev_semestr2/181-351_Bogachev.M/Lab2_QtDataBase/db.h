@@ -15,6 +15,7 @@
 #include <fstream>
 #include <QFile>
 #include <QTextStream>
+//#include "Lab2_QtDataBase.h"
 #include "editreq.h"
 #include "inputw.h"
 #include "inpdel.h"
@@ -43,12 +44,13 @@ public:
 	QString parseunit(std::string str);
 	void showdb(std::vector<bdata> a);
 	QStandardItem * toItem(QString a);
-	void connect_to_serv();
+	//void connect_to_serv();
 	void add(bdata a);
 	void del(int a);
 	bdata get_line_data(int a);
 	void save();
 	void refr();
+	void set_socket(QTcpSocket * a);
 
 private slots:
 	void on_addb_clicked();
@@ -62,13 +64,15 @@ private slots:
 	void on_findsubmb_clicked();
 	void on_findcancb_2_clicked();
 	void on_findsubmb_2_clicked();
+	void read();
 
 private:
 	Ui::db ui;
 	QStandardItemModel *table;
 	QStandardItem *cell;
 	std::vector<bdata> daba;
-	QTcpSocket * socket;
+	QTcpSocket * socket = new QTcpSocket;
+	QByteArray data;
 	//editinp eiwin;
 };
 

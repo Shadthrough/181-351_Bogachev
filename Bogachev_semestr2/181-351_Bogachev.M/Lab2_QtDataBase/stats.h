@@ -1,13 +1,13 @@
 #pragma once
 
-#include <QDialog>
-//#include <QTcpSocket>
+#include <QWidget>
+#include <QTcpSocket>
 #include <QMessageBox>
 #include <QDebug>
 #include "ui_stats.h"
 #include "db.h"
 
-class stats : public QDialog
+class stats : public QWidget
 {
 	Q_OBJECT
 
@@ -18,6 +18,7 @@ public:
 	void set_password(QString a);
 	//QTcpSocket* socket;
 	//QByteArray Data;
+	void set_socket(QTcpSocket * a);
 
 public slots:
 	//void sockReady();
@@ -30,4 +31,5 @@ private slots:
 private:
 	Ui::stats ui;
 	db db_win;
+	QTcpSocket * socket = new QTcpSocket;
 };

@@ -1,10 +1,10 @@
 #include "stats.h"
 
 stats::stats(QWidget *parent)
-	: QDialog(parent)
+	: QWidget(parent)
 {
 	ui.setupUi(this);
-
+	socket = new QTcpSocket(this);
 	/*socket = new QTcpSocket(this);
 		connect(socket, SIGNAL(readyRead()), this, SLOT(sockReady()));
 		connect(socket, SIGNAL(disconnected()), this, SLOT(sockDisc()));*/
@@ -25,7 +25,15 @@ void stats::on_viewb_clicked()
 	//db_win.setdb("DataBase.txt");
 	//db_win.showdb(db.daba);
 	//db_win.set_test("Zhopa:lisa, ruchka:listok");
+	//db db_win;
+	db_win.set_socket(socket);
+	socket->disconnect();
 	db_win.show();
+}
+
+void stats::set_socket(QTcpSocket * a)
+{
+	socket = a;
 }
 
 stats::~stats()

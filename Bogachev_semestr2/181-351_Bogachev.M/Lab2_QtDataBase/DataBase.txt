@@ -3,4 +3,3 @@ ride:228,price:322,comp:SONY,sold:sold
 ride:137,price:8822,comp:SR,sold:sold
 ride:322,price:10000,comp:GUCCI,sold:not sold
 ride:188,price:456,comp:ROLF,sold:sold
-ride:12345,price:123,comp:Rama,sold:sold

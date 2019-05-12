@@ -11,12 +11,18 @@ class Lab2_QtDataBase : public QMainWindow
 
 public:
 	Lab2_QtDataBase(QWidget *parent = Q_NULLPTR);
+	QTcpSocket * get_socket();
 
 private slots:
 	void on_butt_clicked();
 	void on_show_clicked();
+	void on_regb_clicked();
+	void read();
+	void conact();
 
 private:
 	Ui::Lab2_QtDataBaseClass ui;
 	stats st_win;
+	QTcpSocket * socket;
+	QByteArray data;
 };

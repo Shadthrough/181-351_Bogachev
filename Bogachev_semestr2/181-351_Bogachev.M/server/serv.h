@@ -3,10 +3,15 @@
 #include <QObject>
 #include <QTcpServer>
 #include <QTcpSocket>
-
 #include <QtNetwork>
 #include <QByteArray>
 #include <QDebug>
+#include <QSqlDatabase>
+#include <QSqlQuery>
+#include <QSqlError>
+#include <QSqlRecord>
+#include <QDebug>
+#include <QVariant>
 
 class MyTcpServer : public QObject
 {
@@ -14,13 +19,18 @@ class MyTcpServer : public QObject
 public:
 	explicit MyTcpServer(QObject *parent = nullptr);
 	~MyTcpServer();
+	void add(std::string a);
+	void edit(std::string a);
+	void del(std::string a);
+	void refresh(QTcpSocket * a);
+
 public slots:
 	void slotNewConnection();
 	void slotClientDisconnected();
-	void slotServerRead();
+	void slotReadSocket();
 
 private:
-	QTcpServer * mTcpServer;
+	QTcpServer * server;
 	int server_status;
 	QMap<int, QTcpSocket *> SClients;
 };

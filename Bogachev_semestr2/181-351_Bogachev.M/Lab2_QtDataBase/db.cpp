@@ -8,6 +8,8 @@ db::db(QWidget *parent)
 	: QDialog(parent)
 {
 	ui.setupUi(this);
+	socket = new QTcpSocket(this);
+	emit read();
 	setdb("DataBase.txt");
 	showdb(daba);
 	ui.edit->close();
@@ -15,13 +17,28 @@ db::db(QWidget *parent)
 	ui.find_2->close();
 }
 
+void db::read()
+{
+	while (socket->bytesAvailable() > 0)
+	{
+		data = socket->readAll();
+	}
+}
+
 db::~db()
 {
+	socket->disconnect();
 }
+
+void db::set_socket(QTcpSocket * a)
+{
+	socket = a;
+}
+
 //set db
 bool db::setdb(std::string filename)
 {
-	std::fstream f;
+	/*std::fstream f;
 	f.open(filename);
 	if (!f)
 	{
@@ -34,14 +51,28 @@ bool db::setdb(std::string filename)
 		daba.push_back(parse(tmp));
 	}
 	f.close();
+	return true;*/
+	std::string tmp;
+	std::ofstream kostil("Temp.txt");
+	kostil.close();
+	std::fstream f;
+	f.open("Temp.txt");
+	f << data.toStdString();
+	while (!f.eof())
+	{
+		std::getline(f, tmp);
+		daba.push_back(parse(tmp));
+	}
+	f.close();
+	remove("Temp.txt");
 	return true;
 }
 
 
-void db::connect_to_serv()
-{
-	socket->connectToHost("127.0.0.1", 33333);
-}
+//void db::connect_to_serv()
+//{
+//	socket->connectToHost("127.0.0.1", 33333);
+//}
 
 QString db::parseunit(std::string str)
 {
