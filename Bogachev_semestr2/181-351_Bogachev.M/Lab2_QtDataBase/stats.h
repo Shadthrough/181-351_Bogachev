@@ -23,13 +23,17 @@ public:
 public slots:
 	//void sockReady();
 	//void sockDisc();
+	void read();
 
 private slots:
 	void on_viewb_clicked();
+	void on_editb_clicked();
+	void conact();
 	//void on_ser_clicked();
 
 private:
 	Ui::stats ui;
 	db db_win;
-	QTcpSocket * socket = new QTcpSocket;
+	QTcpSocket * socket;
+	QByteArray data;
 };

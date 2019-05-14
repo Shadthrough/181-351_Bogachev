@@ -35,8 +35,6 @@ public:
     QLabel *pssv;
     QLabel *acclvl;
     QLabel *acclvlv;
-    QLabel *regdatev;
-    QLabel *regdate;
     QFrame *line;
     QHBoxLayout *horizontalLayout;
     QPushButton *editb;
@@ -97,18 +95,6 @@ public:
 
         formLayout->setWidget(2, QFormLayout::FieldRole, acclvlv);
 
-        regdatev = new QLabel(layoutWidget);
-        regdatev->setObjectName(QString::fromUtf8("regdatev"));
-        regdatev->setLayoutDirection(Qt::LeftToRight);
-        regdatev->setAlignment(Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter);
-
-        formLayout->setWidget(3, QFormLayout::FieldRole, regdatev);
-
-        regdate = new QLabel(layoutWidget);
-        regdate->setObjectName(QString::fromUtf8("regdate"));
-
-        formLayout->setWidget(3, QFormLayout::LabelRole, regdate);
-
 
         verticalLayout->addLayout(formLayout);
 
@@ -152,8 +138,6 @@ public:
         pssv->setText(QApplication::translate("stats", "TextLabel", nullptr));
         acclvl->setText(QApplication::translate("stats", "Access level:", nullptr));
         acclvlv->setText(QApplication::translate("stats", "TextLabel", nullptr));
-        regdatev->setText(QApplication::translate("stats", "TextLabel", nullptr));
-        regdate->setText(QApplication::translate("stats", "Registration date:", nullptr));
         editb->setText(QApplication::translate("stats", "View users table", nullptr));
         viewb->setText(QApplication::translate("stats", "View trains table", nullptr));
     } // retranslateUi

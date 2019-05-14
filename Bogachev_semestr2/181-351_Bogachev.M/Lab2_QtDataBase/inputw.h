@@ -12,6 +12,7 @@ class inputw : public QDialog
 public:
 	inputw(QWidget *parent = Q_NULLPTR);
 	~inputw();
+	QString get_id();
 	QString get_ride();
 	QString get_price();
 	QString get_comp();

@@ -18,6 +18,13 @@ void inputw::on_okb_clicked()
 		QMessageBox::critical(this, "Alert", "Please, fill in all the lines.");
 }
 
+QString inputw::get_id()
+{
+	QString a;
+	a = ui.idl->text();
+	return a;
+}
+
 QString inputw::get_ride()
 {
 	QString a;

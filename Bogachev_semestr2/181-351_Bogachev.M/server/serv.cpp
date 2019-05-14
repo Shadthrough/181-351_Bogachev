@@ -34,7 +34,7 @@ MyTcpServer::MyTcpServer(QObject *parent) : QObject(parent) {
 		"Status VARCHAR(10) NOT NULL"
 		")");
 
-	query.prepare("INSERT INTO Pricelist(id, train, price, company, status) "
+	query.exec("INSERT INTO Pricelist(id, train, price, company, status) "
 		"VALUES (:id, :train, :price, :company, :status)");
 
 	query.bindValue(":id", "12");
@@ -46,8 +46,8 @@ MyTcpServer::MyTcpServer(QObject *parent) : QObject(parent) {
 	//query.exec("DROP TABLE Pricelist");
 	db.close();
 	//qDebug() << "You suck";*/
-	std::string str = "1:12:123:SR:Sold";
-	add(str);
+	//std::string str = "3:12:123:SR:Sold";
+	//add(str, 0);
 }
 
 void MyTcpServer::refresh(QTcpSocket * a)
@@ -62,9 +62,11 @@ void MyTcpServer::refresh(QTcpSocket * a)
 	//query.exec("CREATE TABLE Pricelist(ID INT NOT NULL, Train INT NOT NULL, Price MONEY NOT NULL, Company VARCHAR(20) NOT NULL, Status VARCHAR(10))");
 	//query.exec("INERT INTO Priselist VALUES (1, 125, 200, SR, Sold)");
 	QByteArray data;
+	query.exec("SELECT * FROM Pricelist");
+	data.clear();
 	while (query.next())
 	{
-		data = "ID:";
+		data.append("ID:");
 		data.append(query.value(0).toByteArray());
 		data.append(",:");
 		data.append(query.value(1).toByteArray());
@@ -76,6 +78,9 @@ void MyTcpServer::refresh(QTcpSocket * a)
 		data.append(query.value(4).toByteArray());
 		data.append("\n");
 	}
+	if (data.isEmpty())
+		data = "I was empty(((";
+	data.append('|');
 	a->write(data);
 }
 
@@ -87,7 +92,7 @@ void MyTcpServer::slotNewConnection()
 		int id_user_socs = (int)clientSocket->socketDescriptor();
 		SClients[id_user_socs] = clientSocket;
 		//SClients[id_user_socs]->write("Hello!\n");
-		connect(SClients[id_user_socs], &QTcpSocket::readyRead, this, &MyTcpServer::slotReadSocket);
+		connect(SClients[id_user_socs], &QTcpSocket::readyRead, this, &MyTcpServer::slotReadSocket);/////////DO A KOSTIL' FOR REDIRECTION
 		connect(SClients[id_user_socs], &QTcpSocket::disconnected, this, &MyTcpServer::slotClientDisconnected);
 		qDebug() << id_user_socs << "Client connected";
 	}
@@ -104,13 +109,22 @@ void MyTcpServer::slotReadSocket()
 		message = array.toStdString();
 		qDebug() << QString::fromStdString(message);
 		std::string func = message.substr(0, message.find('|'));
+		std::string str;
 		if (func == "add")
-			add(message.erase(0, message.find('|') + 1));
+		{
+			message.erase(0, message.find('|') + 1);
+			add(message, id);
+		}
 		else if (func == "delete")
-			del(message.erase(0, message.find('|') + 1));
+		{
+			message.erase(0, message.find('|') + 1);
+			del(message, id);
+		}
 		else if (func == "edit")
-			edit(message.erase(0, message.find('|') + 1));
-		//else if (func == "findtext")
+		{
+			message.erase(0, message.find('|') + 1);
+			edit(message, id);
+		}		//else if (func == "findtext")
 		//	find_text(message.erase(0, message.find('|') + 1));
 		//else if (func == "find")
 		//	find(message.erase(0, message.find('|') + 1));
@@ -171,13 +185,13 @@ void MyTcpServer::slotClientDisconnected()
 {
 	QTcpSocket *clientSocket = (QTcpSocket*)sender();
 	int id = (int)clientSocket->socketDescriptor();
-	clientSocket->close();
 	SClients.remove(id);
 	qDebug() << "Client " << id << " has disconnected";
+	clientSocket->close();
 }
 
 /*------------------Add----------------------;*/
-void MyTcpServer::add(std::string a)
+void MyTcpServer::add(std::string a, int desc)
 {
 	QString id, train, price, comp, stat;
 	id = QString::fromStdString(a.substr(0, a.find(':')));
@@ -215,10 +229,11 @@ void MyTcpServer::add(std::string a)
 	//query.exec("DROP TABLE Pricelist");
 	db.close();
 	//qDebug() << "You suck";*/
+	refresh(SClients[desc]);
 }
 
 /*-------------------------Edit--------------------------*/
-void MyTcpServer::edit(std::string a)
+void MyTcpServer::edit(std::string a, int desk)
 {
 	QString id, train, price, comp, stat;
 	id = QString::fromStdString(a.substr(0, a.find(':')));
@@ -263,10 +278,11 @@ void MyTcpServer::edit(std::string a)
 	//query.exec("DROP TABLE Pricelist");
 	db.close();
 	//qDebug() << "You suck";*/
+	refresh(SClients[desk]);
 }//*/
 
 /*------------------------Delete-------------------------*/
-void MyTcpServer::del(std::string a)
+void MyTcpServer::del(std::string a, int desc)
 {
 	QString id = QString::fromStdString(a);
 	QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE");
@@ -289,6 +305,7 @@ void MyTcpServer::del(std::string a)
 	//query.exec("DROP TABLE Pricelist");
 	db.close();
 	//qDebug() << "You suck";*/
+	refresh(SClients[desc]);
 }//*/
 
 /*-----------------FindText------------------------

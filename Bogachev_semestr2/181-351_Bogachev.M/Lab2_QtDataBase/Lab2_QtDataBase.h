@@ -12,6 +12,7 @@ class Lab2_QtDataBase : public QMainWindow
 public:
 	Lab2_QtDataBase(QWidget *parent = Q_NULLPTR);
 	QTcpSocket * get_socket();
+	~Lab2_QtDataBase();
 
 private slots:
 	void on_butt_clicked();

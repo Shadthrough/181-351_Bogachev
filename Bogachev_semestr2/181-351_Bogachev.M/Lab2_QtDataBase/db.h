@@ -24,6 +24,7 @@
 
 struct bdata
 {
+	QString id;
 	QString ride;
 	QString price;
 	QString comp;
@@ -52,6 +53,9 @@ public:
 	void refr();
 	void set_socket(QTcpSocket * a);
 
+public slots:
+	void on_show();
+
 private slots:
 	void on_addb_clicked();
 	void on_editb_clicked();
@@ -71,7 +75,7 @@ private:
 	QStandardItemModel *table;
 	QStandardItem *cell;
 	std::vector<bdata> daba;
-	QTcpSocket * socket = new QTcpSocket;
+	QTcpSocket * socket;
 	QByteArray data;
 	//editinp eiwin;
 };

@@ -7,10 +7,10 @@ Lab2_QtDataBase::Lab2_QtDataBase(QWidget *parent)
 	: QMainWindow(parent)
 {
 	ui.setupUi(this);
-	socket = new QTcpSocket(this);
+	socket = new QTcpSocket;
 	socket->connectToHost("127.0.0.1", 33333);
-	connect(socket, SIGNAL(connected()), this, SLOT(conact()));
-	connect(socket, SIGNAL(readyRead()), this, SLOT(read()));
+	connect(socket, &QTcpSocket::disconnected, this, &Lab2_QtDataBase::conact);
+	connect(socket, &QTcpSocket::readyRead, this, &Lab2_QtDataBase::read);
 	//st_win = new stats;
 	//connect(socket, SIGNAL(disconnect()), this, SLOT(disconnected()));
 }
@@ -22,7 +22,8 @@ QTcpSocket * Lab2_QtDataBase::get_socket()
 
 void Lab2_QtDataBase::conact()
 {
-	QMessageBox::about(this, "Message", "You are connected");
+	QMessageBox::about(this, "Message", "You are disconnected");
+	socket->close();
 }
 
 void Lab2_QtDataBase::read()
@@ -30,7 +31,14 @@ void Lab2_QtDataBase::read()
 	while (socket->bytesAvailable() > 0)
 	{
 		data = socket->readAll();
+		qDebug() << data;
+		
 	}
+}
+
+Lab2_QtDataBase::~Lab2_QtDataBase()
+{
+	socket->close();
 }
 
 void Lab2_QtDataBase::on_butt_clicked()
@@ -64,8 +72,11 @@ void Lab2_QtDataBase::on_butt_clicked()
 		{
 			hide();
 			found = true;
-			socket->disconnect();
+			disconnect(socket, &QTcpSocket::readyRead, this, &Lab2_QtDataBase::read);
+			//connect(socket, &QTcpSocket::readyRead, st_win, &stats::read); вот это у меня не заработало, подчеркивает конект,
+			//говорит нет перегрузки
 			st_win.set_socket(socket);
+			//socket->disconnect();
 			st_win.set_login(login);
 			st_win.set_password(password);
 			st_win.show();
@@ -89,6 +100,8 @@ void Lab2_QtDataBase::on_show_clicked()
 		ui.pass->setEchoMode(QLineEdit::Password);
 		sight = false;
 	}
+	QByteArray arr = "refresh|aaaaaa";
+	socket->write(arr);
 }
 
 void Lab2_QtDataBase::on_regb_clicked()

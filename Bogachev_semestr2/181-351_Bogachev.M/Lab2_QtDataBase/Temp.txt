@@ -1,0 +1,5 @@
+ID:1,:12,:123,:SR,:Sold
+ID:3,:13,:1200,:Rambler,:Sold
+ID:4,:111,:1300,:Google,:Not sold
+ID:5,:112,:168,:Bomzh,:Sold
+|

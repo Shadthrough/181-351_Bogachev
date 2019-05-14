@@ -19,9 +19,9 @@ class MyTcpServer : public QObject
 public:
 	explicit MyTcpServer(QObject *parent = nullptr);
 	~MyTcpServer();
-	void add(std::string a);
-	void edit(std::string a);
-	void del(std::string a);
+	void add(std::string a, int desc);
+	void edit(std::string a, int desc);
+	void del(std::string a, int desc);
 	void refresh(QTcpSocket * a);
 
 public slots:

@@ -23,8 +23,9 @@ class Ui_inputw
 {
 public:
     QPushButton *okb;
-    QWidget *widget;
+    QWidget *layoutWidget;
     QVBoxLayout *verticalLayout;
+    QLineEdit *idl;
     QLineEdit *trainl;
     QLineEdit *pricel;
     QLineEdit *compl;
@@ -42,30 +43,35 @@ public:
         font.setBold(true);
         font.setWeight(75);
         okb->setFont(font);
-        widget = new QWidget(inputw);
-        widget->setObjectName(QString::fromUtf8("widget"));
-        widget->setGeometry(QRect(10, 18, 291, 91));
-        verticalLayout = new QVBoxLayout(widget);
+        layoutWidget = new QWidget(inputw);
+        layoutWidget->setObjectName(QString::fromUtf8("layoutWidget"));
+        layoutWidget->setGeometry(QRect(10, 18, 291, 93));
+        verticalLayout = new QVBoxLayout(layoutWidget);
         verticalLayout->setSpacing(6);
         verticalLayout->setContentsMargins(11, 11, 11, 11);
         verticalLayout->setObjectName(QString::fromUtf8("verticalLayout"));
         verticalLayout->setContentsMargins(0, 0, 0, 0);
-        trainl = new QLineEdit(widget);
+        idl = new QLineEdit(layoutWidget);
+        idl->setObjectName(QString::fromUtf8("idl"));
+
+        verticalLayout->addWidget(idl);
+
+        trainl = new QLineEdit(layoutWidget);
         trainl->setObjectName(QString::fromUtf8("trainl"));
 
         verticalLayout->addWidget(trainl);
 
-        pricel = new QLineEdit(widget);
+        pricel = new QLineEdit(layoutWidget);
         pricel->setObjectName(QString::fromUtf8("pricel"));
 
         verticalLayout->addWidget(pricel);
 
-        compl = new QLineEdit(widget);
+        compl = new QLineEdit(layoutWidget);
         compl->setObjectName(QString::fromUtf8("compl"));
 
         verticalLayout->addWidget(compl);
 
-        soldl = new QLineEdit(widget);
+        soldl = new QLineEdit(layoutWidget);
         soldl->setObjectName(QString::fromUtf8("soldl"));
 
         verticalLayout->addWidget(soldl);
@@ -80,6 +86,7 @@ public:
     {
         inputw->setWindowTitle(QApplication::translate("inputw", "inputw", nullptr));
         okb->setText(QApplication::translate("inputw", "OK", nullptr));
+        idl->setPlaceholderText(QApplication::translate("inputw", "ID", nullptr));
         trainl->setPlaceholderText(QApplication::translate("inputw", "Train", nullptr));
         pricel->setPlaceholderText(QApplication::translate("inputw", "Price", nullptr));
         compl->setPlaceholderText(QApplication::translate("inputw", "Company", nullptr));

@@ -92,6 +92,8 @@ public:
         tableui = new QTableView(db);
         tableui->setObjectName(QString::fromUtf8("tableui"));
         tableui->setShowGrid(true);
+        tableui->verticalHeader()->setVisible(false);
+        tableui->verticalHeader()->setProperty("showSortIndicator", QVariant(true));
 
         gridLayout->addWidget(tableui, 0, 0, 1, 5);
 

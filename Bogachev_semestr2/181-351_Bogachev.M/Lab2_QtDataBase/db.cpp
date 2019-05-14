@@ -8,10 +8,8 @@ db::db(QWidget *parent)
 	: QDialog(parent)
 {
 	ui.setupUi(this);
-	socket = new QTcpSocket(this);
-	emit read();
-	setdb("DataBase.txt");
-	showdb(daba);
+	socket = new QTcpSocket;
+	//emit read();
 	ui.edit->close();
 	ui.find->close();
 	ui.find_2->close();
@@ -22,17 +20,27 @@ void db::read()
 	while (socket->bytesAvailable() > 0)
 	{
 		data = socket->readAll();
+		qDebug() << data;
 	}
+	setdb("DataBase.txt");
+	showdb(daba);
 }
 
 db::~db()
 {
-	socket->disconnect();
+	//socket->disconnect();
+}
+
+void db::on_show()
+{
+	QByteArray arr = "refresh|";
+	socket->write(arr);
 }
 
 void db::set_socket(QTcpSocket * a)
 {
 	socket = a;
+	connect(socket, &QTcpSocket::readyRead, this, &db::read);
 }
 
 //set db
@@ -52,19 +60,24 @@ bool db::setdb(std::string filename)
 	}
 	f.close();
 	return true;*/
+
 	std::string tmp;
 	std::ofstream kostil("Temp.txt");
 	kostil.close();
 	std::fstream f;
 	f.open("Temp.txt");
-	f << data.toStdString();
-	while (!f.eof())
+	std::string str = data.toStdString().substr(0, data.toStdString().find('|') + 1);
+	f << str;
+	f.close();
+	f.open("Temp.txt");
+	std::getline(f, tmp);
+	while (tmp != "|")
 	{
-		std::getline(f, tmp);
 		daba.push_back(parse(tmp));
+		std::getline(f, tmp);
 	}
 	f.close();
-	remove("Temp.txt");
+	//remove("Temp.txt");
 	return true;
 }
 
@@ -97,6 +110,7 @@ void db::showdb(std::vector<bdata> a)
 {
 	table = new QStandardItemModel;
 	QStringList head;
+	head.append("ID");
 	head.append("Train");
 	head.append("Price, $");
 	head.append("Company");
@@ -111,6 +125,8 @@ void db::showdb(std::vector<bdata> a)
 	{
 		tmp = a[i];
 		col = 0;
+		table->setItem(row, col, toItem(tmp.id));
+		col++;
 		table->setItem(row, col, toItem(tmp.ride));
 		col++;
 		table->setItem(row, col, toItem(tmp.price));
@@ -155,15 +171,28 @@ void db::on_addb_clicked()
 	inputw win;
 	win.setModal(true);
 	win.exec();
+	a.id = win.get_id();
 	a.ride = win.get_ride();//win.trainl->text();
 	a.price = win.get_price();//a.price = win.pricel->text();
 	a.comp = win.get_comp();//a.comp = win.compl->text();
 	a.sold = win.get_sold();//a.sold = win.soldl->text();
 	if (a.comp != "" && a.price != "" && a.ride != "" && a.sold != "")
 	{
-		add(a);
+		//add(a);
+		QByteArray arr = "add|";
+		arr.append(a.id);
+		arr.append(":");
+		arr.append(a.ride);
+		arr.append(":");
+		arr.append(a.price);
+		arr.append(":");
+		arr.append(a.comp);
+		arr.append(":");
+		arr.append(a.sold);
+		socket->write(arr);
+		daba.clear();
 	}
-	refr();
+	//refr();
 }
 
 bdata db::get_line_data(int a)
@@ -218,15 +247,28 @@ void db::on_editcancb_clicked()
 
 void db::on_editsubmb_clicked()
 {
-	int i = ui.numt->text().toInt() - 1;
-	daba[i].ride = ui.trainel->text();
+	QString i = ui.numt->text();//.toInt() -1;
+	/*daba[i].ride = ui.trainel->text();
 	daba[i].price = ui.pricel->text();
 	daba[i].comp = ui.compel->text();
 	daba[i].sold = ui.soldel->text();
-	save();
-	//QMessageBox::about(this, "Info", "Editing was successful, please press the refresh button.");
+	//save();
+	//QMessageBox::about(this, "Info", "Editing was successful, please press the refresh button.");*/
 	ui.edit->close();
-	refr();
+	//refr();
+	QByteArray arr = "edit|";
+	arr.append(i);
+	arr.append(":");
+	arr.append(ui.trainel->text());
+	arr.append(":");
+	arr.append(ui.pricel->text());
+	arr.append(":");
+	arr.append(ui.compel->text());
+	arr.append(":");
+	arr.append(ui.soldel->text());
+	socket->write(arr);
+	daba.clear();
+
 }
 
 void db::on_editb_clicked()
@@ -245,10 +287,26 @@ void db::on_editb_clicked()
 	stnum = std::to_string(num);
 	QString snum = QString::fromStdString(stnum);
 	ui.numt->setText(snum);
-	ui.trainel->setText(daba[num - 1].ride);
-	ui.pricel->setText(daba[num - 1].price);
-	ui.compel->setText(daba[num - 1].comp);
-	ui.soldel->setText(daba[num - 1].sold);
+	int j;
+	bool found = false;
+	for (int i = 0; i < daba.size(); i++)
+	{
+		if (snum == daba[i].id)
+		{
+			j = i;
+			found = true;
+		}
+	}
+	if (!found)
+	{
+		QMessageBox::critical(this, "Alert", "There is so such ID");
+		ui.edit->close();
+		return;
+	}
+	ui.trainel->setText(daba[j].ride);
+	ui.pricel->setText(daba[j].price);
+	ui.compel->setText(daba[j].comp);
+	ui.soldel->setText(daba[j].sold);
 }
 
 void db::del(int a)
@@ -318,8 +376,15 @@ void db::on_delb_clicked()
 	inpdel win;
 	win.setModal(true);
 	win.exec();
-	del(win.get_num());
-	refr();
+	//del(win.get_num());
+	//refr();
+	int id = win.get_num();
+	QByteArray arr = "delete|";
+	std::string kostil = std::to_string(id);
+	QString anotherOne = QString::fromStdString(kostil);
+	arr.append(anotherOne);
+	socket->write(arr);
+	daba.clear();
 }
 
 void db::on_findsubmb_clicked()
@@ -369,6 +434,12 @@ bdata db::parse(std::string str)
 	QString temp;
 	std::string tmp;
 	std::string::size_type b, e;
+	b = str.find(':');
+	e = str.find(',');
+	tmp = str.substr(b + 1, e - b - 1);
+	temp = QString::fromUtf8(tmp.c_str());
+	a.id = temp;
+	str.erase(0, e + 1);
 	b = str.find(':');
 	e = str.find(',');
 	tmp = str.substr(b + 1, e - b - 1);
