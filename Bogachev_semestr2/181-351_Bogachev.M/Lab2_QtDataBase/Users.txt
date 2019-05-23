@@ -1,4 +1,3 @@
 login:admin,password:admin
 login:maks,password:123
 login:anton,password:123
-login:penis,password:cock

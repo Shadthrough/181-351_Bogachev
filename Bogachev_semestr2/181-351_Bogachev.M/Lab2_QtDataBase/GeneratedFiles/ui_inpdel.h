@@ -75,7 +75,7 @@ public:
     void retranslateUi(QDialog *inpdel)
     {
         inpdel->setWindowTitle(QApplication::translate("inpdel", "inpdel", nullptr));
-        label->setText(QApplication::translate("inpdel", "Insert the number of the line, you want to delete.", nullptr));
+        label->setText(QApplication::translate("inpdel", "Insert the ID of the line, you want to delete.", nullptr));
         okb->setText(QApplication::translate("inpdel", "OK", nullptr));
     } // retranslateUi
 

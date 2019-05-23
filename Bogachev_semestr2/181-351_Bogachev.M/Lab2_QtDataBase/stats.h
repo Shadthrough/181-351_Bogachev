@@ -6,6 +6,7 @@
 #include <QDebug>
 #include "ui_stats.h"
 #include "db.h"
+#include "usdb.h"
 
 class stats : public QWidget
 {
@@ -19,11 +20,13 @@ public:
 	//QTcpSocket* socket;
 	//QByteArray Data;
 	void set_socket(QTcpSocket * a);
+	void set_acl(QString a);
 
 public slots:
 	//void sockReady();
 	//void sockDisc();
 	void read();
+	void user_setup();
 
 private slots:
 	void on_viewb_clicked();
@@ -34,6 +37,8 @@ private slots:
 private:
 	Ui::stats ui;
 	db db_win;
+	usdb usdb_win;
 	QTcpSocket * socket;
 	QByteArray data;
+	QString lvl;
 };

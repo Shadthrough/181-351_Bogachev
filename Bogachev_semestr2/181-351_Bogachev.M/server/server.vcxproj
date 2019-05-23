@@ -97,11 +97,17 @@
     </QtMoc>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="crypto.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="serv.cpp" />
+    <ClCompile Include="TinyAES.cpp" />
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="serv.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="crypto.h" />
+    <ClInclude Include="TinyAES.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">

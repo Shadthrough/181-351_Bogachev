@@ -11,6 +11,7 @@
 
 #include <QtCore/QVariant>
 #include <QtWidgets/QApplication>
+#include <QtWidgets/QComboBox>
 #include <QtWidgets/QDialog>
 #include <QtWidgets/QFormLayout>
 #include <QtWidgets/QGridLayout>
@@ -51,7 +52,7 @@ public:
     QLineEdit *compel;
     QVBoxLayout *verticalLayout_2;
     QLabel *label_5;
-    QLineEdit *soldel;
+    QComboBox *eselect;
     QHBoxLayout *horizontalLayout_3;
     QPushButton *editsubmb;
     QPushButton *editcancb;
@@ -63,6 +64,9 @@ public:
     QPushButton *findcancb;
     QGroupBox *find_2;
     QFormLayout *formLayout_2;
+    QHBoxLayout *horizontalLayout_5;
+    QPushButton *findsubmb_2;
+    QPushButton *findcancb_2;
     QHBoxLayout *horizontalLayout_4;
     QVBoxLayout *verticalLayout_5;
     QLabel *label_6;
@@ -75,16 +79,13 @@ public:
     QLineEdit *compel_2;
     QVBoxLayout *verticalLayout_8;
     QLabel *label_9;
-    QLineEdit *soldel_2;
-    QHBoxLayout *horizontalLayout_5;
-    QPushButton *findsubmb_2;
-    QPushButton *findcancb_2;
+    QComboBox *fselect;
 
     void setupUi(QDialog *db)
     {
         if (db->objectName().isEmpty())
             db->setObjectName(QString::fromUtf8("db"));
-        db->resize(441, 439);
+        db->resize(441, 355);
         gridLayout = new QGridLayout(db);
         gridLayout->setSpacing(6);
         gridLayout->setContentsMargins(11, 11, 11, 11);
@@ -205,10 +206,12 @@ public:
 
         verticalLayout_2->addWidget(label_5);
 
-        soldel = new QLineEdit(edit);
-        soldel->setObjectName(QString::fromUtf8("soldel"));
+        eselect = new QComboBox(edit);
+        eselect->addItem(QString());
+        eselect->addItem(QString());
+        eselect->setObjectName(QString::fromUtf8("eselect"));
 
-        verticalLayout_2->addWidget(soldel);
+        verticalLayout_2->addWidget(eselect);
 
 
         horizontalLayout->addLayout(verticalLayout_2);
@@ -271,6 +274,22 @@ public:
         formLayout_2->setSpacing(6);
         formLayout_2->setContentsMargins(11, 11, 11, 11);
         formLayout_2->setObjectName(QString::fromUtf8("formLayout_2"));
+        horizontalLayout_5 = new QHBoxLayout();
+        horizontalLayout_5->setSpacing(6);
+        horizontalLayout_5->setObjectName(QString::fromUtf8("horizontalLayout_5"));
+        findsubmb_2 = new QPushButton(find_2);
+        findsubmb_2->setObjectName(QString::fromUtf8("findsubmb_2"));
+
+        horizontalLayout_5->addWidget(findsubmb_2);
+
+        findcancb_2 = new QPushButton(find_2);
+        findcancb_2->setObjectName(QString::fromUtf8("findcancb_2"));
+
+        horizontalLayout_5->addWidget(findcancb_2);
+
+
+        formLayout_2->setLayout(1, QFormLayout::LabelRole, horizontalLayout_5);
+
         horizontalLayout_4 = new QHBoxLayout();
         horizontalLayout_4->setSpacing(6);
         horizontalLayout_4->setObjectName(QString::fromUtf8("horizontalLayout_4"));
@@ -330,38 +349,28 @@ public:
 
         verticalLayout_8->addWidget(label_9);
 
-        soldel_2 = new QLineEdit(find_2);
-        soldel_2->setObjectName(QString::fromUtf8("soldel_2"));
+        fselect = new QComboBox(find_2);
+        fselect->addItem(QString());
+        fselect->addItem(QString());
+        fselect->setObjectName(QString::fromUtf8("fselect"));
 
-        verticalLayout_8->addWidget(soldel_2);
+        verticalLayout_8->addWidget(fselect);
 
 
         horizontalLayout_4->addLayout(verticalLayout_8);
 
 
-        formLayout_2->setLayout(0, QFormLayout::LabelRole, horizontalLayout_4);
-
-        horizontalLayout_5 = new QHBoxLayout();
-        horizontalLayout_5->setSpacing(6);
-        horizontalLayout_5->setObjectName(QString::fromUtf8("horizontalLayout_5"));
-        findsubmb_2 = new QPushButton(find_2);
-        findsubmb_2->setObjectName(QString::fromUtf8("findsubmb_2"));
-
-        horizontalLayout_5->addWidget(findsubmb_2);
-
-        findcancb_2 = new QPushButton(find_2);
-        findcancb_2->setObjectName(QString::fromUtf8("findcancb_2"));
-
-        horizontalLayout_5->addWidget(findcancb_2);
-
-
-        formLayout_2->setLayout(1, QFormLayout::LabelRole, horizontalLayout_5);
+        formLayout_2->setLayout(0, QFormLayout::SpanningRole, horizontalLayout_4);
 
 
         gridLayout->addWidget(find_2, 4, 0, 1, 5);
 
 
         retranslateUi(db);
+
+        eselect->setCurrentIndex(0);
+        fselect->setCurrentIndex(0);
+
 
         QMetaObject::connectSlotsByName(db);
     } // setupUi
@@ -384,7 +393,10 @@ public:
         label_4->setText(QApplication::translate("db", "Company", nullptr));
         compel->setPlaceholderText(QString());
         label_5->setText(QApplication::translate("db", "Sold/Not sold", nullptr));
-        soldel->setPlaceholderText(QString());
+        eselect->setItemText(0, QApplication::translate("db", "Sold", nullptr));
+        eselect->setItemText(1, QApplication::translate("db", "Not sold", nullptr));
+
+        eselect->setCurrentText(QApplication::translate("db", "Sold", nullptr));
         editsubmb->setText(QApplication::translate("db", "Edit", nullptr));
         editcancb->setText(QApplication::translate("db", "Cancel", nullptr));
         find->setTitle(QApplication::translate("db", "Find Text", nullptr));
@@ -392,6 +404,8 @@ public:
         findsubmb->setText(QApplication::translate("db", "Find", nullptr));
         findcancb->setText(QApplication::translate("db", "Cancel", nullptr));
         find_2->setTitle(QApplication::translate("db", "Find", nullptr));
+        findsubmb_2->setText(QApplication::translate("db", "Find", nullptr));
+        findcancb_2->setText(QApplication::translate("db", "Cancel", nullptr));
         label_6->setText(QApplication::translate("db", "Train", nullptr));
         trainel_2->setPlaceholderText(QString());
         label_7->setText(QApplication::translate("db", "Price", nullptr));
@@ -399,9 +413,10 @@ public:
         label_8->setText(QApplication::translate("db", "Company", nullptr));
         compel_2->setPlaceholderText(QString());
         label_9->setText(QApplication::translate("db", "Sold/Not sold", nullptr));
-        soldel_2->setPlaceholderText(QString());
-        findsubmb_2->setText(QApplication::translate("db", "Find", nullptr));
-        findcancb_2->setText(QApplication::translate("db", "Cancel", nullptr));
+        fselect->setItemText(0, QApplication::translate("db", "Sold", nullptr));
+        fselect->setItemText(1, QApplication::translate("db", "Not sold", nullptr));
+
+        fselect->setCurrentText(QApplication::translate("db", "Sold", nullptr));
     } // retranslateUi
 
 };

@@ -12,6 +12,7 @@
 #include <QSqlRecord>
 #include <QDebug>
 #include <QVariant>
+#include "crypto.h"
 
 class MyTcpServer : public QObject
 {
@@ -23,6 +24,11 @@ public:
 	void edit(std::string a, int desc);
 	void del(std::string a, int desc);
 	void refresh(QTcpSocket * a);
+	void Uadd(std::string a, int desc);
+	void Uedit(std::string a, int desc);
+	void Udel(std::string a, int desc);
+	void Urefresh(QTcpSocket * a);
+	void Ucheck(std::string a, QTcpSocket * sock);
 
 public slots:
 	void slotNewConnection();

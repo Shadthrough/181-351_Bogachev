@@ -13,6 +13,7 @@ public:
 	Lab2_QtDataBase(QWidget *parent = Q_NULLPTR);
 	QTcpSocket * get_socket();
 	~Lab2_QtDataBase();
+	void aftlog();
 
 private slots:
 	void on_butt_clicked();
@@ -26,4 +27,5 @@ private:
 	stats st_win;
 	QTcpSocket * socket;
 	QByteArray data;
+	QString lvl;
 };

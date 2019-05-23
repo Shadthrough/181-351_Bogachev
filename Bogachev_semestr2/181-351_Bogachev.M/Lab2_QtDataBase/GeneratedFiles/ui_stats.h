@@ -34,7 +34,7 @@ public:
     QLabel *pss;
     QLabel *pssv;
     QLabel *acclvl;
-    QLabel *acclvlv;
+    QLabel *acl;
     QFrame *line;
     QHBoxLayout *horizontalLayout;
     QPushButton *editb;
@@ -88,12 +88,12 @@ public:
 
         formLayout->setWidget(2, QFormLayout::LabelRole, acclvl);
 
-        acclvlv = new QLabel(layoutWidget);
-        acclvlv->setObjectName(QString::fromUtf8("acclvlv"));
-        acclvlv->setLayoutDirection(Qt::LeftToRight);
-        acclvlv->setAlignment(Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter);
+        acl = new QLabel(layoutWidget);
+        acl->setObjectName(QString::fromUtf8("acl"));
+        acl->setLayoutDirection(Qt::LeftToRight);
+        acl->setAlignment(Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter);
 
-        formLayout->setWidget(2, QFormLayout::FieldRole, acclvlv);
+        formLayout->setWidget(2, QFormLayout::FieldRole, acl);
 
 
         verticalLayout->addLayout(formLayout);
@@ -137,7 +137,7 @@ public:
         pss->setText(QApplication::translate("stats", "Password:", nullptr));
         pssv->setText(QApplication::translate("stats", "TextLabel", nullptr));
         acclvl->setText(QApplication::translate("stats", "Access level:", nullptr));
-        acclvlv->setText(QApplication::translate("stats", "TextLabel", nullptr));
+        acl->setText(QApplication::translate("stats", "TextLabel", nullptr));
         editb->setText(QApplication::translate("stats", "View users table", nullptr));
         viewb->setText(QApplication::translate("stats", "View trains table", nullptr));
     } // retranslateUi

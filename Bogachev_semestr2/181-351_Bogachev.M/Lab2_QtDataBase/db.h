@@ -15,7 +15,9 @@
 #include <fstream>
 #include <QFile>
 #include <QTextStream>
+#include <QCloseEvent>
 //#include "Lab2_QtDataBase.h"
+#include "crypto.h"
 #include "editreq.h"
 #include "inputw.h"
 #include "inpdel.h"
@@ -52,9 +54,10 @@ public:
 	void save();
 	void refr();
 	void set_socket(QTcpSocket * a);
+	void closeEvent(QCloseEvent *event);
 
 public slots:
-	void on_show();
+	void on_show(QString lvl);
 
 private slots:
 	void on_addb_clicked();
@@ -69,6 +72,7 @@ private slots:
 	void on_findcancb_2_clicked();
 	void on_findsubmb_2_clicked();
 	void read();
+	void on_close();
 
 private:
 	Ui::db ui;

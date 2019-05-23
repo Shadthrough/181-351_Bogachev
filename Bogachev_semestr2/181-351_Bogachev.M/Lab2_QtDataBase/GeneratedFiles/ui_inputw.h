@@ -11,6 +11,7 @@
 
 #include <QtCore/QVariant>
 #include <QtWidgets/QApplication>
+#include <QtWidgets/QComboBox>
 #include <QtWidgets/QDialog>
 #include <QtWidgets/QLineEdit>
 #include <QtWidgets/QPushButton>
@@ -29,7 +30,7 @@ public:
     QLineEdit *trainl;
     QLineEdit *pricel;
     QLineEdit *compl;
-    QLineEdit *soldl;
+    QComboBox *select;
 
     void setupUi(QDialog *inputw)
     {
@@ -45,7 +46,7 @@ public:
         okb->setFont(font);
         layoutWidget = new QWidget(inputw);
         layoutWidget->setObjectName(QString::fromUtf8("layoutWidget"));
-        layoutWidget->setGeometry(QRect(10, 18, 291, 93));
+        layoutWidget->setGeometry(QRect(10, 18, 291, 97));
         verticalLayout = new QVBoxLayout(layoutWidget);
         verticalLayout->setSpacing(6);
         verticalLayout->setContentsMargins(11, 11, 11, 11);
@@ -71,13 +72,18 @@ public:
 
         verticalLayout->addWidget(compl);
 
-        soldl = new QLineEdit(layoutWidget);
-        soldl->setObjectName(QString::fromUtf8("soldl"));
+        select = new QComboBox(layoutWidget);
+        select->addItem(QString());
+        select->addItem(QString());
+        select->setObjectName(QString::fromUtf8("select"));
 
-        verticalLayout->addWidget(soldl);
+        verticalLayout->addWidget(select);
 
 
         retranslateUi(inputw);
+
+        select->setCurrentIndex(0);
+
 
         QMetaObject::connectSlotsByName(inputw);
     } // setupUi
@@ -90,7 +96,10 @@ public:
         trainl->setPlaceholderText(QApplication::translate("inputw", "Train", nullptr));
         pricel->setPlaceholderText(QApplication::translate("inputw", "Price", nullptr));
         compl->setPlaceholderText(QApplication::translate("inputw", "Company", nullptr));
-        soldl->setPlaceholderText(QApplication::translate("inputw", "Sold/Not sold", nullptr));
+        select->setItemText(0, QApplication::translate("inputw", "Sold", nullptr));
+        select->setItemText(1, QApplication::translate("inputw", "Not sold", nullptr));
+
+        select->setCurrentText(QApplication::translate("inputw", "Sold", nullptr));
     } // retranslateUi
 
 };

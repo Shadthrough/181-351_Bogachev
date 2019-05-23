@@ -25,7 +25,7 @@ class Ui_editreq
 public:
     QLabel *label;
     QLineEdit *numl;
-    QWidget *widget;
+    QWidget *layoutWidget;
     QHBoxLayout *horizontalLayout;
     QPushButton *okb;
     QPushButton *cancb;
@@ -46,20 +46,20 @@ public:
         numl->setObjectName(QString::fromUtf8("numl"));
         numl->setGeometry(QRect(20, 37, 193, 18));
         numl->setFont(font);
-        widget = new QWidget(editreq);
-        widget->setObjectName(QString::fromUtf8("widget"));
-        widget->setGeometry(QRect(90, 60, 118, 19));
-        horizontalLayout = new QHBoxLayout(widget);
+        layoutWidget = new QWidget(editreq);
+        layoutWidget->setObjectName(QString::fromUtf8("layoutWidget"));
+        layoutWidget->setGeometry(QRect(90, 60, 118, 19));
+        horizontalLayout = new QHBoxLayout(layoutWidget);
         horizontalLayout->setSpacing(6);
         horizontalLayout->setContentsMargins(11, 11, 11, 11);
         horizontalLayout->setObjectName(QString::fromUtf8("horizontalLayout"));
         horizontalLayout->setContentsMargins(0, 0, 0, 0);
-        okb = new QPushButton(widget);
+        okb = new QPushButton(layoutWidget);
         okb->setObjectName(QString::fromUtf8("okb"));
 
         horizontalLayout->addWidget(okb);
 
-        cancb = new QPushButton(widget);
+        cancb = new QPushButton(layoutWidget);
         cancb->setObjectName(QString::fromUtf8("cancb"));
 
         horizontalLayout->addWidget(cancb);
@@ -73,7 +73,7 @@ public:
     void retranslateUi(QDialog *editreq)
     {
         editreq->setWindowTitle(QApplication::translate("editreq", "editreq", nullptr));
-        label->setText(QApplication::translate("editreq", "Insert the number of the line, you want to edit.", nullptr));
+        label->setText(QApplication::translate("editreq", "Insert the ID of the line, you want to edit.", nullptr));
         okb->setText(QApplication::translate("editreq", "OK", nullptr));
         cancb->setText(QApplication::translate("editreq", "Cancel", nullptr));
     } // retranslateUi

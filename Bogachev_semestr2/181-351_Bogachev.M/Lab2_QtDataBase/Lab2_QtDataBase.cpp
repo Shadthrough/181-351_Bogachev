@@ -30,8 +30,23 @@ void Lab2_QtDataBase::read()
 {
 	while (socket->bytesAvailable() > 0)
 	{
-		data = socket->readAll();
+		QByteArray cryp = socket->readAll();
+		crypto aes;
+		data = aes.decrypt(cryp);
 		qDebug() << data;
+		std::string message;
+		message = data.toStdString();
+		qDebug() << QString::fromStdString(message);
+		std::string resp = message.substr(0, message.find('|'));
+		if (resp == "true")
+		{
+			message.erase(0, message.find('|') + 1);
+			lvl = QString::fromStdString(message);
+			data = QByteArray::fromStdString(resp);
+			aftlog();
+		}
+		else
+			QMessageBox::critical(this, "Alert", "Your login or password is incorrect.");
 		
 	}
 }
@@ -41,13 +56,50 @@ Lab2_QtDataBase::~Lab2_QtDataBase()
 	socket->close();
 }
 
+void Lab2_QtDataBase::aftlog()
+{
+	QString login, password;
+	login = ui.log->text();
+	password = ui.pass->text();
+
+	hide();
+	//found = true;
+	disconnect(socket, &QTcpSocket::readyRead, this, &Lab2_QtDataBase::read);
+	//connect(socket, &QTcpSocket::readyRead, st_win, &stats::read)
+	st_win.set_socket(socket);
+	st_win.set_login(login);
+	st_win.set_password(password);
+	st_win.set_acl(lvl);
+	//socket->disconnect();
+	if (lvl == "administrator")
+	{
+		st_win.show();
+	}
+	else if (lvl == "manager")
+	{
+		st_win.show();
+	}
+	else
+	{
+		emit st_win.user_setup();
+		st_win.show();
+	}
+}
+
 void Lab2_QtDataBase::on_butt_clicked()
 {
 	QString login, password;
 	login =	ui.log->text();
 	password = ui.pass->text();
+	QByteArray arr = "Ucheck|";
+	arr.append(login);
+	arr.append(":");
+	arr.append(password);
+	crypto aes;
+	QByteArray cryp = aes.encrypt(arr);
+	socket->write(cryp);
 
-	std::fstream f;
+	/*std::fstream f;
 	f.open("Users.txt");
 	QString tlog, tpass;
 	std::string tmp, str;
@@ -65,25 +117,22 @@ void Lab2_QtDataBase::on_butt_clicked()
 		e = str.find(',');
 		tmp = str.substr(b + 1, e - b - 1);
 		tpass = QString::fromUtf8(tmp.c_str());
-		str.erase(0, e + 1);
+		str.erase(0, e + 1);*/
 
 
-		if (login == tlog && password == tpass)
-		{
-			hide();
-			found = true;
-			disconnect(socket, &QTcpSocket::readyRead, this, &Lab2_QtDataBase::read);
-			//connect(socket, &QTcpSocket::readyRead, st_win, &stats::read); вот это у меня не заработало, подчеркивает конект,
-			//говорит нет перегрузки
-			st_win.set_socket(socket);
-			//socket->disconnect();
-			st_win.set_login(login);
-			st_win.set_password(password);
-			st_win.show();
-		}
-	}
-	if (!found)
-		QMessageBox::critical(this, "Error", "Incorrect login or password");
+		/*hide();
+		//found = true;
+		disconnect(socket, &QTcpSocket::readyRead, this, &Lab2_QtDataBase::read);
+		//connect(socket, &QTcpSocket::readyRead, st_win, &stats::read); вот это у меня не заработало, подчеркивает конект,
+		//говорит нет перегрузки
+		st_win.set_socket(socket);
+		//socket->disconnect();
+		st_win.set_login(login);
+		st_win.set_password(password);
+		st_win.show();*/
+	//}
+	//if (!found)
+		//QMessageBox::critical(this, "Error", "Incorrect login or password");
 }
 
 bool sight = false;
@@ -100,8 +149,8 @@ void Lab2_QtDataBase::on_show_clicked()
 		ui.pass->setEchoMode(QLineEdit::Password);
 		sight = false;
 	}
-	QByteArray arr = "refresh|aaaaaa";
-	socket->write(arr);
+	//QByteArray arr = "refresh|aaaaaa";
+	//socket->write(arr);
 }
 
 void Lab2_QtDataBase::on_regb_clicked()
@@ -111,11 +160,18 @@ void Lab2_QtDataBase::on_regb_clicked()
 		QMessageBox::critical(this, "Alert", "Entered passwords do not match.");
 		return;
 	}
-	std::string str;
+	/*std::string str;
 	std::fstream f;
 	f.open("Users.txt", std::ios::app);
 	f << std::endl;
 	str = "login:" + ui.logl->text().toStdString() + ",password:" + ui.passl->text().toStdString();
-	f << str;
+	f << str;*/
+	QByteArray arr = "Uadd|";
+	arr.append(ui.logl->text());
+	arr.append(":");
+	arr.append(ui.passl->text());
+	crypto aes;
+	QByteArray cryp = aes.encrypt(arr);
+	socket->write(cryp);
 	QMessageBox::about(this, "Message", "Your regestration is successful.\n Use your login and password ti sign in.");
 }

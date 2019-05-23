@@ -26,28 +26,54 @@ MyTcpServer::MyTcpServer(QObject *parent) : QObject(parent) {
 
 	QSqlQuery query(db);
 	//создали таблицу
-	query.exec("CREATE TABLE Pricelist("
-		"ID INT NOT NULL, "
-		"Train INT NOT NULL,"
-		"Price MONEY NOT NULL,"
-		"Company VARCHAR (20) NOT NULL,"
-		"Status VARCHAR(10) NOT NULL"
+	query.exec("CREATE TABLE Users("
+		"Login VARCHAR(20) NOT NULL, "
+		"Password VARCHAR(25) NOT NULL,"
+		"Access_level VARCHAR(20) NOT NULL"
 		")");
 
-	query.exec("INSERT INTO Pricelist(id, train, price, company, status) "
-		"VALUES (:id, :train, :price, :company, :status)");
+	query.prepare("INSERT INTO Users(login, password, access_level) "
+		"VALUES (:log, :pass, :status)");
 
-	query.bindValue(":id", "12");
-	query.bindValue(":train", "177");
-	query.bindValue(":price", "1200");
-	query.bindValue(":company", "Google");
-	query.bindValue(":status", "Sold");
+	query.bindValue(":log", "admino");
+	query.bindValue(":pass", "admin");
+	query.bindValue(":status", "administrator");
 	query.exec();
 	//query.exec("DROP TABLE Pricelist");
 	db.close();
 	//qDebug() << "You suck";*/
 	//std::string str = "3:12:123:SR:Sold";
 	//add(str, 0);
+}
+void MyTcpServer::Urefresh(QTcpSocket * a)
+{
+	QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE");
+	db.setDatabaseName("DataBase");
+
+	if (db.open())
+		qDebug() << "db is open";
+
+	QSqlQuery query(db);
+	QByteArray data;
+	query.exec("SELECT * FROM Users");
+	data.clear();
+	while (query.next())
+	{
+		data.append("Login:");
+		data.append(query.value(0).toByteArray());
+		data.append(",:");
+		data.append(query.value(1).toByteArray());
+		data.append(",:");
+		data.append(query.value(2).toByteArray());
+		data.append("\n");
+	}
+	if (data.isEmpty())
+		data = "I was empty(((";
+	data.append('|');
+	crypto aes;
+	QByteArray cryp = aes.encrypt(data);
+	a->write(cryp);
+	//a->write(data);
 }
 
 void MyTcpServer::refresh(QTcpSocket * a)
@@ -81,7 +107,10 @@ void MyTcpServer::refresh(QTcpSocket * a)
 	if (data.isEmpty())
 		data = "I was empty(((";
 	data.append('|');
-	a->write(data);
+	crypto aes;
+	QByteArray cryp = aes.encrypt(data);
+	a->write(cryp);
+	//a->write(data);
 }
 
 void MyTcpServer::slotNewConnection() 
@@ -104,9 +133,11 @@ void MyTcpServer::slotReadSocket()
 	int id = (int)clientSocket->socketDescriptor();
 	while (clientSocket->bytesAvailable() > 0)
 	{
-		QByteArray array = clientSocket->readAll();
+		QByteArray arr = clientSocket->readAll();
+		crypto aes;
+		QByteArray dec = aes.decrypt(arr);
 		std::string message;
-		message = array.toStdString();
+		message = dec.toStdString();
 		qDebug() << QString::fromStdString(message);
 		std::string func = message.substr(0, message.find('|'));
 		std::string str;
@@ -124,46 +155,34 @@ void MyTcpServer::slotReadSocket()
 		{
 			message.erase(0, message.find('|') + 1);
 			edit(message, id);
-		}		//else if (func == "findtext")
-		//	find_text(message.erase(0, message.find('|') + 1));
-		//else if (func == "find")
-		//	find(message.erase(0, message.find('|') + 1));
+		}
 		else if (func == "refresh")
 			refresh(clientSocket);
-		//else if (func == "showusers")
-		//	showUsers
-		//else
-		//	retrn;///////
+		else if (func == "Urefresh")
+			Urefresh(clientSocket);
+		else if (func == "Uadd")
+		{
+			message.erase(0, message.find('|') + 1);
+			Uadd(message, id);
+		}
+		else if (func == "Udelete")
+		{
+			message.erase(0, message.find('|') + 1);
+			Udel(message, id);
+		}
+		else if (func == "Uedit")
+		{
+			message.erase(0, message.find('|') + 1);
+			Uedit(message, id);
+		}
+		else if (func == "Ucheck")
+		{
+			message.erase(0, message.find('|') + 1);
+			Ucheck(message, clientSocket);
+		}
+		else
+			return;///////
 
-		/*<name_of_function>&<log>&<pass>
-
-			//find name_of_function;
-		//int pos = message.find("&");
-		//name_of function = message.substr(0,pos);
-		//message.erase(0, pos + 1);
-
-		//find login:
-		//pos = message.find("&");
-		//log = message.substr(0, pos);
-		//message.erase(0, pos + 1);
-
-		//find login:
-		/*pos = message.find("&");
-		pass = message.substr(0, pos);
-		message.erase(0, pos + 1);*/
-		/*
-				//Пока работаем с putty убираем "лишние" символы
-				pass.pop_back();
-				pass.pop_back();
-		*/
-		/*qDebug() << "login = " << QString::fromStdString(log)
-			<< " password = " << QString::fromStdString(pass)
-			<< " result = " << authorize(log, pass);
-
-		array.clear();
-		array.append(authorize(log, pass));
-
-		clientSocket->write(array);*/
 	}
 }
 
@@ -173,7 +192,7 @@ MyTcpServer::~MyTcpServer()
 	//db.close();///////////////////////////////////////////////////////////////////////////////////////////////
 	foreach (int i, SClients.keys()) 
 	{
-		QTextStream os(SClients[i]);
+		QTextStream os(SClients[i]);/////////////////////////////////////////////////////////
 		SClients[i]->close();
 		SClients.remove(i);
 	}
@@ -219,7 +238,7 @@ void MyTcpServer::add(std::string a, int desc)
 
 	query.prepare("INSERT INTO Pricelist(id, train, price, company, status) "
 		"VALUES (:id, :train, :price, :company, :status)");
-
+	//QByteArray test;
 	query.bindValue(":id", id);
 	query.bindValue(":train", train);
 	query.bindValue(":price", price);
@@ -230,6 +249,42 @@ void MyTcpServer::add(std::string a, int desc)
 	db.close();
 	//qDebug() << "You suck";*/
 	refresh(SClients[desc]);
+}
+
+void MyTcpServer::Uadd(std::string a, int desc)
+{
+	QString log, pass;
+	log = QString::fromStdString(a.substr(0, a.find(':')));
+	a.erase(0, a.find(":") + 1);
+	pass = QString::fromStdString(a);
+	//QString line = "";
+	QByteArray arr = pass.toUtf8(), hash, rdy;
+	hash = QCryptographicHash::hash(arr, QCryptographicHash::Md5);
+	for (int i = 0; i < hash.size(); i++)
+		rdy.append(hash[i]);
+	QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE");
+	db.setDatabaseName("DataBase");
+	if (!db.open())
+		qDebug() << db.lastError().text();
+
+	QSqlQuery query(db);
+	query.exec("CREATE TABLE Users("
+		"Login VARCHAR(20) NOT NULL, "
+		"Password VARCHAR(25) NOT NULL,"
+		"Access_level VARCHAR(20) NOT NULL"
+		")");
+
+	query.prepare("INSERT INTO Users(login, password, access_level) "
+		"VALUES (:log, :pass, :acl)");
+	//QByteArray test;
+	query.bindValue(":log", log);
+	query.bindValue(":pass", rdy);
+	query.bindValue(":acl", "user");
+	query.exec();
+	//query.exec("DROP TABLE Pricelist");
+	db.close();
+	//qDebug() << "You suck";*/
+	//Urefresh(SClients[desc]);
 }
 
 /*-------------------------Edit--------------------------*/
@@ -281,6 +336,34 @@ void MyTcpServer::edit(std::string a, int desk)
 	refresh(SClients[desk]);
 }//*/
 
+void MyTcpServer::Uedit(std::string a, int desk)
+{
+	QString id, train, price, comp, stat;
+	id = QString::fromStdString(a.substr(0, a.find(':')));
+	a.erase(0, a.find(":") + 1);
+	stat = QString::fromStdString(a);
+	QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE");
+	db.setDatabaseName("DataBase");
+	if (!db.open())
+		qDebug() << db.lastError().text();
+
+	QSqlQuery query(db);
+	query.exec("CREATE TABLE Users("
+		"Login VARCHAR(20) NOT NULL, "
+		"Password VARCHAR(25) NOT NULL,"
+		"Access_level VARCHAR(20) NOT NULL"
+		")");
+
+	query.prepare("UPDATE Users SET access_level = :stat WHERE login = :id");
+	query.bindValue(":id", id);
+	query.bindValue(":stat", stat);
+	query.exec();
+	//query.exec("DROP TABLE Pricelist");
+	db.close();
+	//qDebug() << "You suck";*/
+	Urefresh(SClients[desk]);
+}//*/
+
 /*------------------------Delete-------------------------*/
 void MyTcpServer::del(std::string a, int desc)
 {
@@ -307,6 +390,81 @@ void MyTcpServer::del(std::string a, int desc)
 	//qDebug() << "You suck";*/
 	refresh(SClients[desc]);
 }//*/
+
+void MyTcpServer::Udel(std::string a, int desc)
+{
+	QString id = QString::fromStdString(a);
+	QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE");
+	db.setDatabaseName("DataBase");
+	if (!db.open())
+		qDebug() << db.lastError().text();
+
+	QSqlQuery query(db);
+	query.exec("CREATE TABLE Users("
+		"Login VARCHAR(20) NOT NULL, "
+		"Password VARCHAR(25) NOT NULL,"
+		"Access_level VARCHAR(20) NOT NULL"
+		")");
+
+	query.prepare("DELETE FROM Users WHERE login = :id");
+	query.bindValue(":id", id);
+	query.exec();
+	//query.exec("DROP TABLE Pricelist");
+	db.close();
+	//qDebug() << "You suck";*/
+	Urefresh(SClients[desc]);
+}//*/
+
+/*-----------------------Check----------------------------*/
+void MyTcpServer::Ucheck(std::string a, QTcpSocket * sock)
+{
+	QString log, pass;
+	log = QString::fromStdString(a.substr(0, a.find(':')));
+	a.erase(0, a.find(":") + 1);
+	pass = QString::fromStdString(a);
+	//QString line = "";
+	QByteArray arr = pass.toUtf8(), hash, rdy;
+	hash = QCryptographicHash::hash(arr, QCryptographicHash::Md5);
+	for (int i = 0; i < hash.size(); i++)
+		rdy.append(hash[i]);
+	QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE");
+	db.setDatabaseName("DataBase");
+	if (!db.open())
+		qDebug() << db.lastError().text();
+
+	QSqlQuery query(db);
+	query.exec("CREATE TABLE Users("
+		"Login VARCHAR(20) NOT NULL, "
+		"Password VARCHAR(25) NOT NULL,"
+		"Access_level VARCHAR(20) NOT NULL"
+		")");
+
+	query.prepare("SELECT * FROM Users WHERE login = :log AND password = :pass");
+	//QByteArray test;
+	query.bindValue(":log", log);
+	query.bindValue(":pass", rdy);
+	query.exec();
+	//query.exec("DROP TABLE Pricelist");
+	QByteArray response;
+	if (query.next())
+	{
+		response = "true|";
+		response.append(query.value(2).toByteArray());
+		crypto aes;
+		QByteArray cryp = aes.encrypt(response);
+		sock->write(cryp);
+	}
+	else
+	{
+		response = "false|";
+		crypto aes;
+		QByteArray cryp = aes.encrypt(response);
+		sock->write(cryp);
+	}
+	db.close();
+	//qDebug() << "You suck";*/
+	//Urefresh(SClients[desc]);
+}
 
 /*-----------------FindText------------------------
 void db::on_findsubmb_clicked()
@@ -354,101 +512,3 @@ void db::on_findsubmb_2_clicked()
 	setdb("DataBase.txt");
 }*/
 
-
-
-
-/*
-//myserver::myserver() {}
-//
-//myserver::~myserver() {}
-//
-//void myserver::startServer()
-//{
-//	if (this->listen(QHostAddress::Any, 5555))
-//	{
-//		qDebug() << "Listening";
-//	}
-//	else
-//	{
-//		qDebug() << "Not listening";
-//	}
-//}
-//
-//void myserver::incomingConnection(int socketDescriptor)
-//{
-//	socket = new QTcpSocket(this);
-//	socket->setSocketDescriptor(socketDescriptor);
-//
-//	connect(socket, SIGNAL(readyRead()), this, SLOT(sockReady()));
-//	connect(socket, SIGNAL(disconnected()), this, SLOT(sockDisc()));
-//
-//	qDebug() << socketDescriptor << " Client connected";
-//
-//	socket->write("You are connected");
-//	qDebug() << "Send client connect status - YES";
-//}
-//
-//void myserver::sockReady()
-//{
-//
-//}
-//
-//void myserver::sockDisc()
-//{
-//	qDebug() << "Disconnect";
-//	socket->deleteLater();
-//}
-
-///////////////////////////////////////////////////////////////////////// OLD
-#include <QDebug> 
-
-MyTcpServer::~MyTcpServer()
-{
-	server_status = 0;
-}
-
-MyTcpServer::MyTcpServer(QObject *parent) :QObject(parent) {
-	mTcpServer = new QTcpServer(this);
-
-	connect(mTcpServer, &QTcpServer::newConnection, this, &MyTcpServer::slotNewConnection);
-
-	if (!mTcpServer->listen(QHostAddress::Any, 33333) && server_status == 0) {
-		qDebug() << "server isn't started";
-	}
-	else {
-		server_status = 1;
-		qDebug() << "server is started";
-	}
-}
-
-void MyTcpServer::slotServerRead() {
-	QByteArray array;
-	//char temp; 
-	while (mTcpSocket->bytesAvailable() > 0) {
-		array = mTcpSocket->readAll();
-		// temp = *array.data(); 
-		// temp++; 
-	}
-	mTcpSocket->write(array);
-	// QByteArray::fromStdString((std::string)&temp) 
-	QTextStream os(mTcpSocket);
-	os.setAutoDetectUnicode(true);
-	os « "";
-}
-
-void MyTcpServer::slotNewConnection() {
-	if (server_status == 1) {
-		mTcpSocket = mTcpServer->nextPendingConnection();
-		mTcpSocket->write("Hello, World!" "I'm echo server!\r\n");
-		connect(mTcpSocket, &QTcpSocket::readyRead, this, &MyTcpServer::slotServerRead);
-		connect(mTcpSocket, &QTcpSocket::disconnected, this, &MyTcpServer::slotClientDisconnected);
-	}
-}
-
-void MyTcpServer::slotClientDisconnected() {
-	if (server_status == 1) {
-		mTcpSocket->close();
-		qDebug() << QString::fromUtf8("stop");
-		server_status = 0;
-	}
-}*/

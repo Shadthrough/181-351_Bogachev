@@ -113,6 +113,7 @@
     </QtRcc>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="crypto.cpp" />
     <ClCompile Include="db.cpp" />
     <ClCompile Include="editreq.cpp" />
     <ClCompile Include="inpdel.cpp" />
@@ -120,6 +121,8 @@
     <ClCompile Include="Lab2_QtDataBase.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="stats.cpp" />
+    <ClCompile Include="TinyAES.cpp" />
+    <ClCompile Include="usdb.cpp" />
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="Lab2_QtDataBase.h" />
@@ -131,6 +134,7 @@
     <QtUic Include="inputw.ui" />
     <QtUic Include="Lab2_QtDataBase.ui" />
     <QtUic Include="stats.ui" />
+    <QtUic Include="usdb.ui" />
   </ItemGroup>
   <ItemGroup>
     <QtRcc Include="Lab2_QtDataBase.qrc" />
@@ -161,6 +165,14 @@
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="editreq.h">
+      <IncludePath Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">.\GeneratedFiles;.;$(QTDIR)\include;.\GeneratedFiles\$(ConfigurationName);$(QTDIR)\include\QtCore;$(QTDIR)\include\QtGui;$(QTDIR)\include\QtANGLE;$(QTDIR)\include\QtWidgets;$(QTDIR)\include\QtNetwork</IncludePath>
+      <IncludePath Condition="'$(Configuration)|$(Platform)'=='Release|x64'">.\GeneratedFiles;.;$(QTDIR)\include;.\GeneratedFiles\$(ConfigurationName);$(QTDIR)\include\QtCore;$(QTDIR)\include\QtGui;$(QTDIR)\include\QtANGLE;$(QTDIR)\include\QtWidgets;$(QTDIR)\include\QtNetwork</IncludePath>
+    </QtMoc>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="crypto.h" />
+    <ClInclude Include="TinyAES.h" />
+    <QtMoc Include="usdb.h">
       <IncludePath Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">.\GeneratedFiles;.;$(QTDIR)\include;.\GeneratedFiles\$(ConfigurationName);$(QTDIR)\include\QtCore;$(QTDIR)\include\QtGui;$(QTDIR)\include\QtANGLE;$(QTDIR)\include\QtWidgets;$(QTDIR)\include\QtNetwork</IncludePath>
       <IncludePath Condition="'$(Configuration)|$(Platform)'=='Release|x64'">.\GeneratedFiles;.;$(QTDIR)\include;.\GeneratedFiles\$(ConfigurationName);$(QTDIR)\include\QtCore;$(QTDIR)\include\QtGui;$(QTDIR)\include\QtANGLE;$(QTDIR)\include\QtWidgets;$(QTDIR)\include\QtNetwork</IncludePath>
     </QtMoc>

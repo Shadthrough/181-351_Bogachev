@@ -19,7 +19,9 @@ void db::read()
 {
 	while (socket->bytesAvailable() > 0)
 	{
-		data = socket->readAll();
+		QByteArray cryp = socket->readAll();
+		crypto aes;
+		data = aes.decrypt(cryp);
 		qDebug() << data;
 	}
 	setdb("DataBase.txt");
@@ -29,12 +31,33 @@ void db::read()
 db::~db()
 {
 	//socket->disconnect();
+	//disconnect(socket, &QTcpSocket::readyRead, this, &db::read);
 }
 
-void db::on_show()
+void db::closeEvent(QCloseEvent *event)
 {
+	emit on_close();
+	event->accept();
+}
+
+void db::on_close()
+{
+	disconnect(socket, &QTcpSocket::readyRead, this, &db::read);
+	daba.clear();
+}
+
+void db::on_show(QString lvl)
+{
+	if (lvl == "user")
+	{
+		ui.addb->close();
+		ui.delb->close();
+		ui.editb->close();
+	}
 	QByteArray arr = "refresh|";
-	socket->write(arr);
+	crypto aes;
+	QByteArray cryp = aes.encrypt(arr);
+	socket->write(cryp);
 }
 
 void db::set_socket(QTcpSocket * a)
@@ -77,7 +100,7 @@ bool db::setdb(std::string filename)
 		std::getline(f, tmp);
 	}
 	f.close();
-	//remove("Temp.txt");
+	remove("Temp.txt");
 	return true;
 }
 
@@ -189,7 +212,9 @@ void db::on_addb_clicked()
 		arr.append(a.comp);
 		arr.append(":");
 		arr.append(a.sold);
-		socket->write(arr);
+		crypto aes;
+		QByteArray cryp = aes.encrypt(arr);
+		socket->write(cryp);
 		daba.clear();
 	}
 	//refr();
@@ -265,10 +290,11 @@ void db::on_editsubmb_clicked()
 	arr.append(":");
 	arr.append(ui.compel->text());
 	arr.append(":");
-	arr.append(ui.soldel->text());
-	socket->write(arr);
+	arr.append(ui.eselect->currentText());
+	crypto aes;
+	QByteArray cryp = aes.encrypt(arr);
+	socket->write(cryp);
 	daba.clear();
-
 }
 
 void db::on_editb_clicked()
@@ -306,7 +332,7 @@ void db::on_editb_clicked()
 	ui.trainel->setText(daba[j].ride);
 	ui.pricel->setText(daba[j].price);
 	ui.compel->setText(daba[j].comp);
-	ui.soldel->setText(daba[j].sold);
+	//ui.soldel->setText(daba[j].sold);
 }
 
 void db::del(int a)
@@ -357,7 +383,7 @@ void db::on_findsubmb_2_clicked()
 		if ((daba[i].ride != ui.trainel_2->text() && ui.trainel_2->text() != "")
 			|| (daba[i].price != ui.pricel_2->text() && ui.pricel_2->text() != "")
 			|| (daba[i].comp != ui.compel_2->text() && ui.compel_2->text() != "")
-			|| (daba[i].sold != ui.soldel_2->text() && ui.soldel_2->text() != ""))
+			|| (daba[i].sold != ui.fselect->currentText() && ui.fselect->currentText() != ""))
 		{
 			daba.erase(daba.begin() + i);
 			i--;
@@ -383,7 +409,9 @@ void db::on_delb_clicked()
 	std::string kostil = std::to_string(id);
 	QString anotherOne = QString::fromStdString(kostil);
 	arr.append(anotherOne);
-	socket->write(arr);
+	crypto aes;
+	QByteArray cryp = aes.encrypt(arr);
+	socket->write(cryp);
 	daba.clear();
 }
 

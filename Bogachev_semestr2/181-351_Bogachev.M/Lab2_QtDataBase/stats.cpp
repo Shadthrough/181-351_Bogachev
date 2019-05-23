@@ -36,8 +36,12 @@ void stats::set_password(QString a)
 
 void stats::on_editb_clicked()
 {
-	QByteArray arr = "refresh|cad";
-	socket->write(arr);
+	disconnect(socket, &QTcpSocket::readyRead, this, &stats::read);
+	usdb_win.set_socket(socket);
+	//socket->disconnect();
+	usdb_win.set_lvl(ui.acl->text());
+	emit usdb_win.on_ushow();
+	usdb_win.show();
 }
 
 void stats::on_viewb_clicked()
@@ -46,11 +50,22 @@ void stats::on_viewb_clicked()
 	//db_win.showdb(db.daba);
 	//db_win.set_test("Zhopa:lisa, ruchka:listok");
 	//db db_win;
+	lvl = ui.acl->text();
 	disconnect(socket, &QTcpSocket::readyRead, this, &stats::read);
 	db_win.set_socket(socket);
 	//socket->disconnect();
-	emit db_win.on_show();
+	emit db_win.on_show(lvl);
 	db_win.show();
+}
+
+void stats::set_acl(QString a)
+{
+	ui.acl->setText(a);
+}
+
+void stats::user_setup()
+{
+	ui.editb->close();
 }
 
 void stats::set_socket(QTcpSocket * a)

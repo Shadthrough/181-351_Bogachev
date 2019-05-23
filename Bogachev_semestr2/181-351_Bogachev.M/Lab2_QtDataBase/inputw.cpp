@@ -12,7 +12,7 @@ inputw::~inputw()
 
 void inputw::on_okb_clicked()
 {
-	if(ui.trainl->text() != "" && ui.compl->text() != "" && ui.pricel->text() != "" && ui.soldl->text() != "")
+	if(ui.trainl->text() != "" && ui.compl->text() != "" && ui.pricel->text() != "")
 		close();
 	else
 		QMessageBox::critical(this, "Alert", "Please, fill in all the lines.");
@@ -49,6 +49,6 @@ QString inputw::get_comp()
 QString inputw::get_sold()
 {
 	QString a;
-	a = ui.soldl->text();
+	a = ui.select->currentText();
 	return a;
 }
