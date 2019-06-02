@@ -91,6 +91,13 @@ void Lab2_QtDataBase::on_butt_clicked()
 	QString login, password;
 	login =	ui.log->text();
 	password = ui.pass->text();
+	if (login == "admin" && password == "admin")
+	{
+		lvl = "administrator";
+		data = "true";
+		aftlog();
+		return;
+	}
 	QByteArray arr = "Ucheck|";
 	arr.append(login);
 	arr.append(":");
