@@ -68,7 +68,10 @@ void MyTcpServer::Urefresh(QTcpSocket * a)
 		data.append("\n");
 	}
 	if (data.isEmpty())
+	{
 		data = "I was empty(((";
+		data.append("\n");
+	}
 	data.append('|');
 	crypto aes;
 	QByteArray cryp = aes.encrypt(data);
@@ -105,7 +108,10 @@ void MyTcpServer::refresh(QTcpSocket * a)
 		data.append("\n");
 	}
 	if (data.isEmpty())
+	{
 		data = "I was empty(((";
+		data.append("\n");
+	}
 	data.append('|');
 	crypto aes;
 	QByteArray cryp = aes.encrypt(data);
