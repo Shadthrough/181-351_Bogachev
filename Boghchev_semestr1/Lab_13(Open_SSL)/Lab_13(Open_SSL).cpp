@@ -1,4 +1,4 @@
-/*#ifdef _MSC_VER
+#ifdef _MSC_VER
 #define _CRT_SECURE_NO_WARNINGS
 #endif
 #include <iostream>
@@ -159,7 +159,7 @@ int main()
 
 // ekz.cpp : Этот файл содержит функцию "main". Здесь начинается и заканчивается выполнение программы.
 //
-#ifdef _MSC_VER
+/*#ifdef _MSC_VER
 #define _CRT_SECURE_NO_WARNINGS
 #endif
 #include <iostream> 

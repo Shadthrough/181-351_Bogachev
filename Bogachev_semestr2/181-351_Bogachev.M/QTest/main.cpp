@@ -1,19 +1,14 @@
-#include <QtCore/QCoreApplication>
-#include <fstream>
-#include <qcryptographichash.h>
+#include "QTest.h"
+#include <QtWidgets/QApplication>
 #include <qdebug.h>
-#include <string>
-#include <iostream>
 
 int main(int argc, char *argv[])
 {
-	QCoreApplication a(argc, argv);
-
-	QString line = "ZHOPA";
-	QByteArray arr = line.toUtf8(), hash;
-	hash = QCryptographicHash::hash(arr, QCryptographicHash::Md5);
-	for (int i = 0; i < hash.size(); i++)
-	qDebug() << hash[i];
-
+	QApplication a(argc, argv);
+	//QTest w;
+	//w.show();
+	QByteArray arr = "suk";
+	//arr.remove(0, 4);
+	qDebug() << arr.toBase64();
 	return a.exec();
 }

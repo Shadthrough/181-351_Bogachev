@@ -11,7 +11,9 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "server", "server\server.vcx
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ConnectionSQLite", "ConnectionSQLite\ConnectionSQLite.vcxproj", "{3094A9E2-2A9E-42C3-A5E7-108EF0082028}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "QTest", "QTest\QTest.vcxproj", "{E4C1A9E1-7D4C-4C4E-B8B3-3489141715C3}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SSLTest", "SSLTest\SSLTest.vcxproj", "{FB4E1CC0-2869-4FC2-9088-7E5EE6760772}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "QTest", "QTest\QTest.vcxproj", "{20D24CD5-B209-4FC9-95BA-3F78222BDEE8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -47,12 +49,18 @@ Global
 		{3094A9E2-2A9E-42C3-A5E7-108EF0082028}.Release|x64.ActiveCfg = Release|x64
 		{3094A9E2-2A9E-42C3-A5E7-108EF0082028}.Release|x64.Build.0 = Release|x64
 		{3094A9E2-2A9E-42C3-A5E7-108EF0082028}.Release|x86.ActiveCfg = Release|x64
-		{E4C1A9E1-7D4C-4C4E-B8B3-3489141715C3}.Debug|x64.ActiveCfg = Debug|x64
-		{E4C1A9E1-7D4C-4C4E-B8B3-3489141715C3}.Debug|x64.Build.0 = Debug|x64
-		{E4C1A9E1-7D4C-4C4E-B8B3-3489141715C3}.Debug|x86.ActiveCfg = Debug|x64
-		{E4C1A9E1-7D4C-4C4E-B8B3-3489141715C3}.Release|x64.ActiveCfg = Release|x64
-		{E4C1A9E1-7D4C-4C4E-B8B3-3489141715C3}.Release|x64.Build.0 = Release|x64
-		{E4C1A9E1-7D4C-4C4E-B8B3-3489141715C3}.Release|x86.ActiveCfg = Release|x64
+		{FB4E1CC0-2869-4FC2-9088-7E5EE6760772}.Debug|x64.ActiveCfg = Debug|x64
+		{FB4E1CC0-2869-4FC2-9088-7E5EE6760772}.Debug|x64.Build.0 = Debug|x64
+		{FB4E1CC0-2869-4FC2-9088-7E5EE6760772}.Debug|x86.ActiveCfg = Debug|x64
+		{FB4E1CC0-2869-4FC2-9088-7E5EE6760772}.Release|x64.ActiveCfg = Release|x64
+		{FB4E1CC0-2869-4FC2-9088-7E5EE6760772}.Release|x64.Build.0 = Release|x64
+		{FB4E1CC0-2869-4FC2-9088-7E5EE6760772}.Release|x86.ActiveCfg = Release|x64
+		{20D24CD5-B209-4FC9-95BA-3F78222BDEE8}.Debug|x64.ActiveCfg = Debug|x64
+		{20D24CD5-B209-4FC9-95BA-3F78222BDEE8}.Debug|x64.Build.0 = Debug|x64
+		{20D24CD5-B209-4FC9-95BA-3F78222BDEE8}.Debug|x86.ActiveCfg = Debug|x64
+		{20D24CD5-B209-4FC9-95BA-3F78222BDEE8}.Release|x64.ActiveCfg = Release|x64
+		{20D24CD5-B209-4FC9-95BA-3F78222BDEE8}.Release|x64.Build.0 = Release|x64
+		{20D24CD5-B209-4FC9-95BA-3F78222BDEE8}.Release|x86.ActiveCfg = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
