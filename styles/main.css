@@ -1,7 +1,12 @@
 .navi {
     position: relative;
+    background-color: #000000;
 }
 
 .cards {
     margin: 20px 40px;
+}
+
+.drk {
+    background: #000000;
 }
