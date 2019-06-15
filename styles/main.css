@@ -1,3 +1,7 @@
+.body {
+    font-family: Gilroy Regular;
+}
+
 .navi {
     position: relative;
     background-color: #000000;
@@ -9,4 +13,10 @@
 
 .drk {
     background: #000000;
+}
+
+.cube {
+    border: solid #55B432 8px;
+    font-size: 30px;
+    text-align: center;
 }
