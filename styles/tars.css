@@ -4,8 +4,9 @@
     display: none;
 }
 
-.hovble:hover {
-    background-color: lightsteelblue;
+.hoverable:hover {
+    background-color: rgb(219, 219, 219);
+    cursor: pointer;
 }
 
 .box {
@@ -15,4 +16,9 @@
 
 #ctar {
     transition-duration: 1s;
+}
+
+.calc {
+    background: black;
+    text-align: center;
 }
