@@ -1,0 +1,18 @@
+.tars {
+    opacity: 0;
+    transition-duration: 1s;
+    display: none;
+}
+
+.hovble:hover {
+    background-color: lightsteelblue;
+}
+
+.box {
+    border: solid 2px;
+    text-align: center;
+}
+
+#ctar {
+    transition-duration: 1s;
+}
