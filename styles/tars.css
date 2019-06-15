@@ -22,3 +22,9 @@
     background: black;
     text-align: center;
 }
+
+.back {
+    position: absolute;
+    left: 90%;
+    z-index: 1;
+}
